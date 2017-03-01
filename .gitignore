@@ -1,0 +1,4 @@
+chaincode/go/go
+app/app
+client/client
+*.out
