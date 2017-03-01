@@ -2,16 +2,13 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
-	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gocraft/web"
 	"github.com/hyperledger/fabric/core/crypto"
 	"github.com/hyperledger/fabric/core/crypto/primitives"
-	"github.com/hyperledger/fabric/core/peer"
-	pb "github.com/hyperledger/fabric/protos"
 	"github.com/op/go-logging"
 	"github.com/spf13/viper"
 )
@@ -98,67 +95,67 @@ func main() {
 		os.Exit(-1)
 	}
 
-	time.Sleep(time.Second * 20)
-	max := 1000
+	// 	time.Sleep(time.Second * 20)
+	// 	max := 1000
 
-	loginChan := make(chan int, max)
+	// 	loginChan := make(chan int, max)
 
-	for i := 0; i < max; i++ {
-		go func(j int) {
-			clientConn, _ := peer.NewPeerClientConnection()
-			serverClient := pb.NewPeerClient(clientConn)
-			TestCurrency("t"+strconv.Itoa(j), strconv.Itoa(j), "jim", loginChan, serverClient)
-		}(i)
-	}
-	sum := 1
-	err := 0
-	start, end := time.Now().Unix(), time.Now().Unix()
+	// 	for i := 0; i < max; i++ {
+	// 		go func(j int) {
+	// 			clientConn, _ := peer.NewPeerClientConnection()
+	// 			serverClient := pb.NewPeerClient(clientConn)
+	// 			TestCurrency("t"+strconv.Itoa(j), strconv.Itoa(j), "jim", loginChan, serverClient)
+	// 		}(i)
+	// 	}
+	// 	sum := 1
+	// 	err := 0
+	// 	start, end := time.Now().Unix(), time.Now().Unix()
 
-loop1:
-	for {
-		select {
-		case flag := <-loginChan:
-			if flag == 1 {
-				err++
-			}
-			if sum == max {
-				end = time.Now().Unix()
-				break loop1
-			}
-			sum++
-		}
-	}
+	// loop1:
+	// 	for {
+	// 		select {
+	// 		case flag := <-loginChan:
+	// 			if flag == 1 {
+	// 				err++
+	// 			}
+	// 			if sum == max {
+	// 				end = time.Now().Unix()
+	// 				break loop1
+	// 			}
+	// 			sum++
+	// 		}
+	// 	}
 
-	time.Sleep(time.Second * 20)
+	// 	time.Sleep(time.Second * 20)
 
-	createChan := make(chan int, max)
-	for i := 0; i < max; i++ {
-		go func(j int) {
-			clientConn, _ := peer.NewPeerClientConnection()
-			serverClient := pb.NewPeerClient(clientConn)
-			TestgetCurrency("t"+strconv.Itoa(j), createChan, serverClient)
-		}(i)
-	}
-	sum1 := 1
-	err1 := 0
-	start1, end1 := time.Now().Unix(), time.Now().Unix()
+	// 	createChan := make(chan int, max)
+	// 	for i := 0; i < max; i++ {
+	// 		go func(j int) {
+	// 			clientConn, _ := peer.NewPeerClientConnection()
+	// 			serverClient := pb.NewPeerClient(clientConn)
+	// 			TestgetCurrency("t"+strconv.Itoa(j), createChan, serverClient)
+	// 		}(i)
+	// 	}
+	// 	sum1 := 1
+	// 	err1 := 0
+	// 	start1, end1 := time.Now().Unix(), time.Now().Unix()
 
-	for {
-		select {
-		case flag := <-createChan:
-			if flag == 1 {
-				err1++
-			}
-			// fmt.Println(sum1)
-			if sum1 == max {
-				end1 = time.Now().Unix()
-				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
-				fmt.Println("*****************", err1, end1-start1, float64(max)/float64(end1-start1))
-				return
-			}
-			sum1++
-		}
-	}
+	// 	for {
+	// 		select {
+	// 		case flag := <-createChan:
+	// 			if flag == 1 {
+	// 				err1++
+	// 			}
+	// 			// fmt.Println(sum1)
+	// 			if sum1 == max {
+	// 				end1 = time.Now().Unix()
+	// 				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
+	// 				fmt.Println("*****************", err1, end1-start1, float64(max)/float64(end1-start1))
+	// 				return
+	// 			}
+	// 			sum1++
+	// 		}
+	// 	}
 
 	// go eventListener(chaincodeName)
 
@@ -174,24 +171,24 @@ loop1:
 
 	// go execCancel()
 
-	// restAddress := viper.GetString("app.rest.address")
-	// tlsEnable := viper.GetBool("app.tls.enabled")
+	restAddress := viper.GetString("app.rest.address")
+	tlsEnable := viper.GetBool("app.tls.enabled")
 
-	// // Initialize the REST service object
-	// // myLogger.Infof("Initializing the REST service on %s, TLS is %s.", restAddress, (map[bool]string{true: "enabled", false: "disabled"})[tlsEnable])
+	// Initialize the REST service object
+	// myLogger.Infof("Initializing the REST service on %s, TLS is %s.", restAddress, (map[bool]string{true: "enabled", false: "disabled"})[tlsEnable])
 
-	// router := buildRouter()
+	router := buildRouter()
 
-	// // Start server
-	// if tlsEnable {
-	// 	err := http.ListenAndServeTLS(restAddress, viper.GetString("app.tls.cert.file"), viper.GetString("app.tls.key.file"), router)
-	// 	if err != nil {
-	// 		// myLogger.Errorf("ListenAndServeTLS: %s", err)
-	// 	}
-	// } else {
-	// 	err := http.ListenAndServe(restAddress, router)
-	// 	if err != nil {
-	// 		// myLogger.Errorf("ListenAndServe: %s", err)
-	// 	}
-	// }
+	// Start server
+	if tlsEnable {
+		err := http.ListenAndServeTLS(restAddress, viper.GetString("app.tls.cert.file"), viper.GetString("app.tls.key.file"), router)
+		if err != nil {
+			// myLogger.Errorf("ListenAndServeTLS: %s", err)
+		}
+	} else {
+		err := http.ListenAndServe(restAddress, router)
+		if err != nil {
+			// myLogger.Errorf("ListenAndServe: %s", err)
+		}
+	}
 }

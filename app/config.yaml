@@ -27,7 +27,7 @@ redis:
 app:
     rest:
         # The address that the REST service will listen on for incoming requests.
-        address:  0.0.0.0:7060
+        address:  0.0.0.0:7059
     
      # TLS Settings for p2p communications
     tls:

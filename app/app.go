@@ -1027,15 +1027,10 @@ func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
 
 	encoder := json.NewEncoder(rw)
 
-	// 删除cookie
-	http.SetCookie(rw, &http.Cookie{
-		Name:   "loginfo",
-		Path:   "/",
-		MaxAge: -1,
-	})
+	result, _ := TestgetCurrency("t1", createChan)
 
 	rw.WriteHeader(http.StatusOK)
-	encoder.Encode(restResp{Status: SUCCESS})
+	encoder.Encode(restResp{Status: result})
 	// myLogger.Debug("Logout successful.")
 
 	// myLogger.Debug("------------- logout Done")

@@ -148,12 +148,12 @@ func getCurrency(id string) (currency string, err error) {
 	return queryChaincode(chaincodeInput)
 }
 
-func TestgetCurrency(id string, createChan chan int, serverClient pb.PeerClient) (currency string, err error) {
+func TestgetCurrency(id string, createChan chan int) (currency string, err error) {
 	// myLogger.Debugf("Chaincode [queryCurrencyByID] args:[%s]-[%s]", "id", id)
 
 	chaincodeInput := &pb.ChaincodeInput{Args: util.ToChaincodeArgs("get", id)}
 
-	currency, err = queryChaincode2(chaincodeInput, serverClient)
+	currency, err = queryChaincode(chaincodeInput)
 	if err != nil {
 		createChan <- 1
 		return
