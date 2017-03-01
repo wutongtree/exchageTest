@@ -54,7 +54,7 @@ func createCurrency(currency string, count int64, user string) (txid string, err
 	return invokeChaincode(invoker, chaincodeInput)
 }
 
-func TestCurrency(key, value, user string, createChan chan int, serverClient pb.PeerClient) (txid string, err error) {
+func TestCurrency(key, value, user string, createChan chan int) (txid string, err error) {
 	invoker, err := setCryptoClient(user, "")
 	if err != nil {
 		// myLogger.Errorf("Failed getting invoker [%s]", err)
@@ -70,7 +70,7 @@ func TestCurrency(key, value, user string, createChan chan int, serverClient pb.
 	// chaincodeInput := &pb.ChaincodeInput{Args: util.ToChaincodeArgs("createCurrency", currency, strconv.FormatInt(count, 10), base64.StdEncoding.EncodeToString(invokerCert.GetCertificate()))}
 	chaincodeInput := &pb.ChaincodeInput{Args: util.ToChaincodeArgs("put", key, value)}
 
-	txid, err = invokeChaincode2(invoker, chaincodeInput, serverClient)
+	txid, err = invokeChaincode(invoker, chaincodeInput)
 	if err != nil {
 		createChan <- 1
 		return
