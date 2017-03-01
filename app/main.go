@@ -101,37 +101,37 @@ func main() {
 	time.Sleep(time.Second * 20)
 	max := 1000
 
-	// 	loginChan := make(chan int)
+	loginChan := make(chan int, max)
 
-	// 	for i := 0; i < max; i++ {
-	// 		go func(j int) {
-	// 			clientConn, _ := peer.NewPeerClientConnection()
-	// 			serverClient := pb.NewPeerClient(clientConn)
-	// 			TestCurrency("t"+strconv.Itoa(j), strconv.Itoa(j), "jim", loginChan, serverClient)
-	// 		}(i)
-	// 	}
-	// 	sum := 1
-	// 	err := 0
-	// 	start, end := time.Now().Unix(), time.Now().Unix()
+	for i := 0; i < max; i++ {
+		go func(j int) {
+			clientConn, _ := peer.NewPeerClientConnection()
+			serverClient := pb.NewPeerClient(clientConn)
+			TestCurrency("t"+strconv.Itoa(j), strconv.Itoa(j), "jim", loginChan, serverClient)
+		}(i)
+	}
+	sum := 1
+	err := 0
+	start, end := time.Now().Unix(), time.Now().Unix()
 
-	// loop1:
-	// 	for {
-	// 		select {
-	// 		case flag := <-loginChan:
-	// 			if flag == 1 {
-	// 				err++
-	// 			}
-	// 			if sum == max {
-	// 				end = time.Now().Unix()
-	// 				break loop1
-	// 			}
-	// 			sum++
-	// 		}
-	// 	}
+loop1:
+	for {
+		select {
+		case flag := <-loginChan:
+			if flag == 1 {
+				err++
+			}
+			if sum == max {
+				end = time.Now().Unix()
+				break loop1
+			}
+			sum++
+		}
+	}
 
-	// 	time.Sleep(time.Second * 20)
+	time.Sleep(time.Second * 20)
 
-	createChan := make(chan int)
+	createChan := make(chan int, max)
 	for i := 0; i < max; i++ {
 		go func(j int) {
 			clientConn, _ := peer.NewPeerClientConnection()
