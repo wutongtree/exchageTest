@@ -152,7 +152,7 @@ loop1:
 			// fmt.Println(sum1)
 			if sum1 == max {
 				end1 = time.Now().Unix()
-				// fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
+				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
 				fmt.Println("*****************", err1, end1-start1, float64(max)/float64(end1-start1))
 				return
 			}
