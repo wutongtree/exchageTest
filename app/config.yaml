@@ -452,7 +452,7 @@ security:
     tcert:
       batch:
         # The size of the batch of TCerts
-        size:  200
+        size:  20
     # Enable the release of keys needed to decrypt attributes from TCerts in
     # the chaincode using the metadata field of the transaction (requires
     # security to be enabled).

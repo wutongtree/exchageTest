@@ -77,6 +77,10 @@ func processTransaction(tx *pb.Transaction) (*pb.Response, error) {
 	return serverClient.ProcessTransaction(context.Background(), tx)
 }
 
+func processTransaction2(tx *pb.Transaction, client pb.PeerClient) (*pb.Response, error) {
+	return client.ProcessTransaction(context.Background(), tx)
+}
+
 func confidentiality(enabled bool) {
 	confidentialityOn = enabled
 
@@ -245,6 +249,82 @@ func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error
 	}
 
 	resp, err := processTransaction(transaction)
+
+	// myLogger.Debugf("Resp [%s]", resp.String())
+	// myLogger.Debug("Query....done")
+
+	if resp.Status != pb.Response_SUCCESS {
+		return "", errors.New(string(resp.Msg))
+	}
+
+	return string(resp.Msg), nil
+}
+
+func invokeChaincode2(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClient) (result string, err error) {
+	// myLogger.Debug("------------- invoke...")
+	// Get a transaction handler to be used to submit the execute transaction
+	// and bind the chaincode access control logic using the binding
+	submittingCertHandler, err := invoker.GetTCertificateHandlerNext()
+	if err != nil {
+		return "", fmt.Errorf("Error invoking chaincode: %s ", err)
+	}
+	txHandler, err := submittingCertHandler.GetTransactionHandler()
+	if err != nil {
+		return "", fmt.Errorf("Error invoking chaincode: %s ", err)
+	}
+
+	// Prepare spec and submit
+	spec := &pb.ChaincodeSpec{
+		Type:        pb.ChaincodeSpec_GOLANG,
+		ChaincodeID: &pb.ChaincodeID{Name: chaincodeName},
+		CtorMsg:     chaincodeInput,
+		// Metadata:             sigma, // Proof of identity
+		ConfidentialityLevel: confidentialityLevel,
+	}
+
+	chaincodeInvocationSpec := &pb.ChaincodeInvocationSpec{ChaincodeSpec: spec}
+
+	// Now create the Transactions message and send to Peer.
+	transaction, err := txHandler.NewChaincodeExecute(chaincodeInvocationSpec, util.GenerateUUID())
+	if err != nil {
+		return "", fmt.Errorf("Error invoking chaincode: %s ", err)
+	}
+
+	resp, err := processTransaction2(transaction, serverClient)
+	if err != nil {
+		return "", fmt.Errorf("Error invoking chaincode: %s ", err)
+	}
+
+	if resp.Status != pb.Response_SUCCESS {
+		return "", fmt.Errorf("Error invoking chaincode: %s ", string(resp.Msg))
+	}
+	// myLogger.Debugf("Resp [%s]", resp.String())
+
+	// myLogger.Debug("------------- Done!")
+
+	return string(resp.Msg), nil
+}
+
+func queryChaincode2(chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClient) (result string, err error) {
+	// myLogger.Debug("Query....")
+
+	// Prepare spec and submit
+	spec := &pb.ChaincodeSpec{
+		Type:                 pb.ChaincodeSpec_GOLANG,
+		ChaincodeID:          &pb.ChaincodeID{Name: chaincodeName},
+		CtorMsg:              chaincodeInput,
+		ConfidentialityLevel: confidentialityLevel,
+	}
+
+	chaincodeInvocationSpec := &pb.ChaincodeInvocationSpec{ChaincodeSpec: spec}
+
+	// Now create the Transactions message and send to Peer.
+	transaction, err := adminInvoker.NewChaincodeQuery(chaincodeInvocationSpec, util.GenerateUUID())
+	if err != nil {
+		return "", fmt.Errorf("Error query chaincode: %s ", err)
+	}
+
+	resp, err := processTransaction2(transaction, serverClient)
 
 	// myLogger.Debugf("Resp [%s]", resp.String())
 	// myLogger.Debug("Query....done")
