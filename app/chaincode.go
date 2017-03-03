@@ -162,6 +162,45 @@ func TestgetCurrency(id string, createChan chan int) (currency string, err error
 	return
 }
 
+func TestCurrency1(key, value, user string) (txid string, err error) {
+	invoker, err := setCryptoClient(user, "")
+	if err != nil {
+		// myLogger.Errorf("Failed getting invoker [%s]", err)
+		return
+	}
+	// invokerCert, err := invoker.GetTCertificateHandlerNext()
+	// if err != nil {
+	// 	// myLogger.Errorf("Failed getting TCert [%s]", err)
+	// 	return
+	// }
+	// // myLogger.Debugf("Chaincode [createCurrency] args:[%s]-[%s],[%s]-[%s]", "currency", currency, "count", count)
+
+	// chaincodeInput := &pb.ChaincodeInput{Args: util.ToChaincodeArgs("createCurrency", currency, strconv.FormatInt(count, 10), base64.StdEncoding.EncodeToString(invokerCert.GetCertificate()))}
+	chaincodeInput := &pb.ChaincodeInput{Args: util.ToChaincodeArgs("put", key, value)}
+
+	txid, err = invokeChaincode(invoker, chaincodeInput)
+	if err != nil {
+		// createChan <- 1
+		return
+	}
+	// createChan <- 0
+	return
+}
+
+func TestgetCurrency1(id string) (currency string, err error) {
+	// myLogger.Debugf("Chaincode [queryCurrencyByID] args:[%s]-[%s]", "id", id)
+
+	chaincodeInput := &pb.ChaincodeInput{Args: util.ToChaincodeArgs("get", id)}
+
+	currency, err = queryChaincode(chaincodeInput)
+	if err != nil {
+		// createChan <- 1
+		return
+	}
+	// createChan <- 0
+	return
+}
+
 func getCurrencysByUser(user string) (currencys string, err error) {
 	// invoker, err := setCryptoClient(user, "")
 	// if err != nil {

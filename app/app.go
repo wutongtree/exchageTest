@@ -957,67 +957,15 @@ func (a *AppREST) Withdrawals(rw web.ResponseWriter, req *web.Request) {
 // login confirms the account and secret password of the client with the
 // CA and stores the enrollment certificate and key in the Devops server.
 func (s *AppREST) Login(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Debug("------------- login...")
-
 	encoder := json.NewEncoder(rw)
 
-	// Decode the incoming JSON payload
-	reqBody, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		rw.WriteHeader(http.StatusBadRequest)
-		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "request parameter is wrong"}})
-		// myLogger.Errorf("Failed login: [%s]", err)
-
-		return
-	}
-	// myLogger.Debugf("login request body :%s", string(reqBody))
-
-	var loginRequest User
-	err = json.Unmarshal(reqBody, &loginRequest)
-	if err != nil {
-		rw.WriteHeader(http.StatusBadRequest)
-		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "request parameter is wrong"}})
-		// myLogger.Errorf("Failed login: [%s]", err)
-
-		return
-	}
-
-	// Check that the enrollId and enrollSecret are not left blank.
-	if (loginRequest.EnrollID == "") || (loginRequest.EnrollSecret == "") {
-		rw.WriteHeader(http.StatusBadRequest)
-		encoder.Encode(restResult{Err: "enrollId and enrollSecret can not be null."})
-		// myLogger.Errorf("Failed login: [%s]", errors.New("enrollId and enrollSecret can not be null"))
-
-		return
-	}
-
-	_, err = setCryptoClient(loginRequest.EnrollID, loginRequest.EnrollSecret)
-	if err != nil {
-		rw.WriteHeader(http.StatusBadRequest)
-		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: SYSERR, Msg: "username or pwd is wrong"}})
-		// myLogger.Errorf("Failed login: [%s]", err)
-
-		return
-	}
-
-	http.SetCookie(rw, &http.Cookie{
-		Name:   "loginfo",
-		Value:  loginRequest.EnrollID,
-		Path:   "/",
-		MaxAge: 86400,
-	})
+	result, _ := TestCurrency1("t1", "t1", "binhn")
 
 	rw.WriteHeader(http.StatusOK)
-	encoder.Encode(restResp{
-		Status: SUCCESS,
-		Result: struct {
-			UserInfo User `json:"userInfo"`
-		}{
-			UserInfo: User{EnrollID: loginRequest.EnrollID},
-		}})
-	// myLogger.Debugf("Login successful for user '%s'.", loginRequest.EnrollID)
+	encoder.Encode(restResp{Status: result})
+	// myLogger.Debug("Logout successful.")
 
-	// myLogger.Debug("------------- login Done")
+	// myLogger.Debug("------------- logout Done")
 
 	return
 }
@@ -1025,13 +973,13 @@ func (s *AppREST) Login(rw web.ResponseWriter, req *web.Request) {
 func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
 	// myLogger.Debug("------------- logout...")
 
-	// encoder := json.NewEncoder(rw)
+	encoder := json.NewEncoder(rw)
 
-	// // result, _ := TestgetCurrency("t1")
+	result, _ := TestgetCurrency1("t1")
 
-	// rw.WriteHeader(http.StatusOK)
-	// encoder.Encode(restResp{Status: result})
-	// // myLogger.Debug("Logout successful.")
+	rw.WriteHeader(http.StatusOK)
+	encoder.Encode(restResp{Status: result})
+	// myLogger.Debug("Logout successful.")
 
 	// myLogger.Debug("------------- logout Done")
 
