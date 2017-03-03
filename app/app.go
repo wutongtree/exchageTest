@@ -1025,13 +1025,13 @@ func (s *AppREST) Login(rw web.ResponseWriter, req *web.Request) {
 func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
 	// myLogger.Debug("------------- logout...")
 
-	encoder := json.NewEncoder(rw)
+	// encoder := json.NewEncoder(rw)
 
-	// result, _ := TestgetCurrency("t1")
+	// // result, _ := TestgetCurrency("t1")
 
-	rw.WriteHeader(http.StatusOK)
-	encoder.Encode(restResp{Status: result})
-	// myLogger.Debug("Logout successful.")
+	// rw.WriteHeader(http.StatusOK)
+	// encoder.Encode(restResp{Status: result})
+	// // myLogger.Debug("Logout successful.")
 
 	// myLogger.Debug("------------- logout Done")
 
