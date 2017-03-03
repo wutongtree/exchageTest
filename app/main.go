@@ -109,7 +109,7 @@ func main() {
 		go func(j int) {
 			// clientConn, _ := peer.NewPeerClientConnection()
 			// serverClient := pb.NewPeerClient(clientConn)
-			TestCurrency("t"+strconv.Itoa(j), strconv.Itoa(j), "jim", loginChan)
+			TestCurrency("t"+strconv.Itoa(j), strconv.Itoa(j), "binhn", loginChan)
 		}(i)
 	}
 
