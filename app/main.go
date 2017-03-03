@@ -11,6 +11,7 @@ import (
 	"github.com/gocraft/web"
 	"github.com/hyperledger/fabric/core/crypto"
 	"github.com/hyperledger/fabric/core/crypto/primitives"
+	"github.com/hyperledger/fabric/core/peer"
 	"github.com/op/go-logging"
 	"github.com/spf13/viper"
 )
@@ -98,7 +99,7 @@ func main() {
 	}
 
 	time.Sleep(time.Second * 20)
-	max := 1000
+	max := 500000
 
 	loginChan := make(chan int, max)
 	sum := 1
@@ -130,36 +131,36 @@ func main() {
 		}
 	}
 
-	// 	time.Sleep(time.Second * 20)
+	time.Sleep(time.Second * 20)
 
-	// 	createChan := make(chan int, max)
-	// 	for i := 0; i < max; i++ {
-	// 		go func(j int) {
-	// 			clientConn, _ := peer.NewPeerClientConnection()
-	// 			serverClient := pb.NewPeerClient(clientConn)
-	// 			TestgetCurrency("t"+strconv.Itoa(j), createChan, serverClient)
-	// 		}(i)
-	// 	}
-	// 	sum1 := 1
-	// 	err1 := 0
-	// 	start1, end1 := time.Now().Unix(), time.Now().Unix()
+	createChan := make(chan int, max)
+	for i := 0; i < max; i++ {
+		go func(j int) {
+			clientConn, _ := peer.NewPeerClientConnection()
+			serverClient := pb.NewPeerClient(clientConn)
+			TestgetCurrency("t"+strconv.Itoa(j), createChan, serverClient)
+		}(i)
+	}
+	sum1 := 1
+	err1 := 0
+	start1, end1 := time.Now().Unix(), time.Now().Unix()
 
-	// 	for {
-	// 		select {
-	// 		case flag := <-createChan:
-	// 			if flag == 1 {
-	// 				err1++
-	// 			}
-	// 			// fmt.Println(sum1)
-	// 			if sum1 == max {
-	// 				end1 = time.Now().Unix()
-	// 				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
-	// 				fmt.Println("*****************", err1, end1-start1, float64(max)/float64(end1-start1))
-	// 				return
-	// 			}
-	// 			sum1++
-	// 		}
-	// 	}
+	for {
+		select {
+		case flag := <-createChan:
+			if flag == 1 {
+				err1++
+			}
+			// fmt.Println(sum1)
+			if sum1 == max {
+				end1 = time.Now().Unix()
+				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
+				fmt.Println("*****************", err1, end1-start1, float64(max)/float64(end1-start1))
+				return
+			}
+			sum1++
+		}
+	}
 
 	// go eventListener(chaincodeName)
 
