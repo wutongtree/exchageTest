@@ -1027,7 +1027,7 @@ func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
 
 	encoder := json.NewEncoder(rw)
 
-	result, _ := TestgetCurrency("t1")
+	// result, _ := TestgetCurrency("t1")
 
 	rw.WriteHeader(http.StatusOK)
 	encoder.Encode(restResp{Status: result})
