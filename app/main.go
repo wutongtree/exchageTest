@@ -113,7 +113,7 @@ func main() {
 		}(i)
 	}
 
-	// loop1:
+loop1:
 	for {
 		select {
 		case flag := <-loginChan:
@@ -123,8 +123,8 @@ func main() {
 			if sum == max {
 				end = time.Now().Unix()
 				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
-				// break loop1
-				return
+				break loop1
+				// return
 			}
 			sum++
 		}
