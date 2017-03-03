@@ -11,7 +11,6 @@ import (
 	"github.com/gocraft/web"
 	"github.com/hyperledger/fabric/core/crypto"
 	"github.com/hyperledger/fabric/core/crypto/primitives"
-	"github.com/hyperledger/fabric/core/peer"
 	"github.com/op/go-logging"
 	"github.com/spf13/viper"
 )
@@ -136,9 +135,7 @@ func main() {
 	createChan := make(chan int, max)
 	for i := 0; i < max; i++ {
 		go func(j int) {
-			clientConn, _ := peer.NewPeerClientConnection()
-			serverClient := pb.NewPeerClient(clientConn)
-			TestgetCurrency("t"+strconv.Itoa(j), createChan, serverClient)
+			TestgetCurrency("t"+strconv.Itoa(j), createChan)
 		}(i)
 	}
 	sum1 := 1
