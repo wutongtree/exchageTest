@@ -98,7 +98,7 @@ func main() {
 	}
 
 	time.Sleep(time.Second * 20)
-	max := 500000
+	max := 5000
 
 	loginChan := make(chan int, max)
 	sum := 1
