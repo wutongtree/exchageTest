@@ -72,7 +72,7 @@ func (a *adapter) Recv(msg *pb.Event) (bool, error) {
 }
 
 func (a *adapter) Disconnected(err error) {
-	myLogger.Debug("Disconnected...exiting\n")
+	// myLogger.Debug("Disconnected...exiting\n")
 	os.Exit(1)
 }
 
@@ -95,24 +95,24 @@ func eventListener(chaincodeID string) {
 	for {
 		select {
 		case b := <-a.blockEvent:
-			myLogger.Debug("Received block\n")
-			myLogger.Debug("--------------\n")
+			// myLogger.Debug("Received block\n")
+			// myLogger.Debug("--------------\n")
 			for _, r := range b.Block.Transactions {
 				// myLogger.Debugf("Transaction:\n\t[%v]\n", r)
 				chaincodeResult[r.Txid] = Chaincode_Success
 				dealResult(r.Txid)
 			}
 		case r := <-a.rejectionEvent:
-			myLogger.Debug("Received rejected transaction\n")
-			myLogger.Debug("--------------\n")
+			// myLogger.Debug("Received rejected transaction\n")
+			// myLogger.Debug("--------------\n")
 			// myLogger.Debugf("Transaction error:\n%s\n", r.Rejection.ErrorMsg)
 
 			if r.Rejection.Tx != nil {
 				chaincodeResult[r.Rejection.Tx.Txid] = r.Rejection.ErrorMsg
 			}
 		case ce := <-a.chaincodeEvent:
-			myLogger.Debug("Received chaincode event\n")
-			myLogger.Debug("------------------------\n")
+			// myLogger.Debug("Received chaincode event\n")
+			// myLogger.Debug("------------------------\n")
 			// myLogger.Debugf("Chaincode Event:%v\n", ce)
 
 			var batch BatchResult

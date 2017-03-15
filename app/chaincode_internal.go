@@ -121,7 +121,7 @@ func deployInternal() (resp *pb.Response, err error) {
 }
 
 func invokeChaincodeSigma(invoker crypto.Client, invokerCert crypto.CertificateHandler, chaincodeInput *pb.ChaincodeInput) (result string, err error) {
-	myLogger.Debug("------------- invoke...")
+	// myLogger.Debug("------------- invoke...")
 	// Get a transaction handler to be used to submit the execute transaction
 	// and bind the chaincode access control logic using the binding
 	submittingCertHandler, err := invoker.GetTCertificateHandlerNext()
@@ -175,13 +175,13 @@ func invokeChaincodeSigma(invoker crypto.Client, invokerCert crypto.CertificateH
 	}
 	// myLogger.Debugf("Resp [%s]", resp.String())
 
-	myLogger.Debug("------------- Done!")
+	// myLogger.Debug("------------- Done!")
 
 	return string(resp.Msg), nil
 }
 
 func invokeChaincode(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput) (result string, err error) {
-	myLogger.Debug("------------- invoke...")
+	// myLogger.Debug("------------- invoke...")
 	// Get a transaction handler to be used to submit the execute transaction
 	// and bind the chaincode access control logic using the binding
 	submittingCertHandler, err := invoker.GetTCertificateHandlerNext()
@@ -221,13 +221,13 @@ func invokeChaincode(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput) (
 	}
 	// myLogger.Debugf("Resp [%s]", resp.String())
 
-	myLogger.Debug("------------- Done!")
+	// myLogger.Debug("------------- Done!")
 
 	return string(resp.Msg), nil
 }
 
 func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error) {
-	myLogger.Debug("Query....")
+	// myLogger.Debug("Query....")
 
 	// Prepare spec and submit
 	spec := &pb.ChaincodeSpec{
@@ -248,7 +248,7 @@ func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error
 	resp, err := processTransaction(transaction)
 
 	// myLogger.Debugf("Resp [%s]", resp.String())
-	myLogger.Debug("Query....done")
+	// myLogger.Debug("Query....done")
 
 	if resp.Status != pb.Response_SUCCESS {
 		return "", errors.New(string(resp.Msg))
@@ -258,7 +258,7 @@ func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error
 }
 
 func invokeChaincode2(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClient) (result string, err error) {
-	myLogger.Debug("------------- invoke...")
+	// myLogger.Debug("------------- invoke...")
 	// Get a transaction handler to be used to submit the execute transaction
 	// and bind the chaincode access control logic using the binding
 	submittingCertHandler, err := invoker.GetTCertificateHandlerNext()
@@ -297,13 +297,13 @@ func invokeChaincode2(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput, 
 	}
 	// myLogger.Debugf("Resp [%s]", resp.String())
 
-	myLogger.Debug("------------- Done!")
+	// myLogger.Debug("------------- Done!")
 
 	return string(resp.Msg), nil
 }
 
 func queryChaincode2(chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClient) (result string, err error) {
-	myLogger.Debug("Query....")
+	// myLogger.Debug("Query....")
 
 	// Prepare spec and submit
 	spec := &pb.ChaincodeSpec{
@@ -324,7 +324,7 @@ func queryChaincode2(chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClie
 	resp, err := processTransaction2(transaction, serverClient)
 
 	// myLogger.Debugf("Resp [%s]", resp.String())
-	myLogger.Debug("Query....done")
+	// myLogger.Debug("Query....done")
 
 	if resp.Status != pb.Response_SUCCESS {
 		return "", errors.New(string(resp.Msg))

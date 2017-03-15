@@ -17,7 +17,7 @@ var (
 )
 
 func deploy() (err error) {
-	myLogger.Debug("------------- deploy")
+	// myLogger.Debug("------------- deploy")
 
 	resp, err := deployInternal()
 	if err != nil {
@@ -31,7 +31,7 @@ func deploy() (err error) {
 		return errors.New(string(resp.Msg))
 	}
 
-	myLogger.Debug("------------- Done!")
+	// myLogger.Debug("------------- Done!")
 	return
 }
 

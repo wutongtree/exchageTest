@@ -963,15 +963,15 @@ func (s *AppREST) Login(rw web.ResponseWriter, req *web.Request) {
 
 	rw.WriteHeader(http.StatusOK)
 	encoder.Encode(restResp{Status: result})
-	myLogger.Debug("Logout successful.")
+	// myLogger.Debug("Logout successful.")
 
-	myLogger.Debug("------------- logout Done")
+	// myLogger.Debug("------------- logout Done")
 
 	return
 }
 
 func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
-	myLogger.Debug("------------- logout...")
+	// myLogger.Debug("------------- logout...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -979,9 +979,9 @@ func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
 
 	rw.WriteHeader(http.StatusOK)
 	encoder.Encode(restResp{Status: result})
-	myLogger.Debug("Logout successful.")
+	// myLogger.Debug("Logout successful.")
 
-	myLogger.Debug("------------- logout Done")
+	// myLogger.Debug("------------- logout Done")
 
 	return
 }
@@ -997,7 +997,7 @@ func checkLogin(req *web.Request) (string, error) {
 
 // IsLogin IsLogin
 func (s *AppREST) IsLogin(rw web.ResponseWriter, req *web.Request) {
-	myLogger.Debug("------------- islogin...")
+	// myLogger.Debug("------------- islogin...")
 
 	encoder := json.NewEncoder(rw)
 	enrollID, err := checkLogin(req)
@@ -1019,13 +1019,13 @@ func (s *AppREST) IsLogin(rw web.ResponseWriter, req *web.Request) {
 
 	// myLogger.Debugf("IsLogout successful for user '%s'.", enrollID)
 
-	myLogger.Debug("------------- islogin Done")
+	// myLogger.Debug("------------- islogin Done")
 
 	return
 }
 
 func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
-	myLogger.Debug("------------- my...")
+	// myLogger.Debug("------------- my...")
 
 	encoder := json.NewEncoder(rw)
 	enrollID, err := checkLogin(req)
@@ -1096,7 +1096,7 @@ func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
 
 	// myLogger.Debugf("My successful for user '%s'.", enrollID)
 
-	myLogger.Debug("------------- my Done")
+	// myLogger.Debug("------------- my Done")
 
 	return
 }

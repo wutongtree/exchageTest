@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"time"
+
 	"github.com/gocraft/web"
 	"github.com/hyperledger/fabric/core/crypto"
 	"github.com/op/go-logging"
@@ -94,7 +96,7 @@ func main() {
 	}
 
 	// time.Sleep(time.Second * 20)
-	max := 5000
+	max := 1000000
 
 	// loginChan := make(chan int, max)
 	// sum := 1
@@ -170,7 +172,8 @@ func main() {
 	// go execExpired()
 
 	// go execCancel()
-
+	fmt.Println("+++++++++++++++++")
+	time.Sleep(time.Minute)
 	restAddress := viper.GetString("app.rest.address")
 	tlsEnable := viper.GetBool("app.tls.enabled")
 
