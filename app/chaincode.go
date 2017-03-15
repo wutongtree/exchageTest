@@ -194,7 +194,7 @@ func TestgetCurrency2(id string) (currency string, err error) {
 
 	_, err = queryChaincode(chaincodeInput)
 	if err != nil {
-】		return
+		return
 	}
 	return
 }
