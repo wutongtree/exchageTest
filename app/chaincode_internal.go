@@ -25,13 +25,13 @@ var (
 
 func initNVP() (err error) {
 	if err = initPeerClient(); err != nil {
-		// myLogger.Debugf("Failed initNVP [%s]", err)
+		myLogger.Debugf("Failed initNVP [%s]", err)
 		return
 	}
 
-	adminInvoker, err = setCryptoClient("binhn", "7avZQLwcUe9q")
+	adminInvoker, err = setCryptoClient("admin", "Xurw3yU9zI0l")
 	if err != nil {
-		// myLogger.Errorf("Failed getting invoker [%s]", err)
+		myLogger.Errorf("Failed getting invoker [%s]", err)
 		return
 	}
 
@@ -39,10 +39,6 @@ func initNVP() (err error) {
 }
 
 func initPeerClient() (err error) {
-	// config.SetupTestConfig(".")
-	viper.Set("ledger.blockchain.deploy-system-chaincode", "false")
-	viper.Set("peer.validator.validity-period.verification", "false")
-
 	peerClientConn, err = peer.NewPeerClientConnection()
 	if err != nil {
 		fmt.Printf("error connection to server at host:port = %s\n", viper.GetString("peer.address"))
@@ -116,16 +112,16 @@ func deployInternal() (resp *pb.Response, err error) {
 
 	resp, err = processTransaction(transaction)
 
-	// myLogger.Debugf("resp [%s]", resp.String())
+	myLogger.Debugf("resp [%s]", resp.String())
 
 	chaincodeName = cds.ChaincodeSpec.ChaincodeID.Name
-	// myLogger.Debugf("ChaincodeName [%s]", chaincodeName)
+	myLogger.Debugf("ChaincodeName [%s]", chaincodeName)
 
 	return
 }
 
 func invokeChaincodeSigma(invoker crypto.Client, invokerCert crypto.CertificateHandler, chaincodeInput *pb.ChaincodeInput) (result string, err error) {
-	// myLogger.Debug("------------- invoke...")
+	myLogger.Debug("------------- invoke...")
 	// Get a transaction handler to be used to submit the execute transaction
 	// and bind the chaincode access control logic using the binding
 	submittingCertHandler, err := invoker.GetTCertificateHandlerNext()
@@ -177,15 +173,15 @@ func invokeChaincodeSigma(invoker crypto.Client, invokerCert crypto.CertificateH
 	if resp.Status != pb.Response_SUCCESS {
 		return "", fmt.Errorf("Error invoking chaincode: %s ", string(resp.Msg))
 	}
-	// myLogger.Debugf("Resp [%s]", resp.String())
+	myLogger.Debugf("Resp [%s]", resp.String())
 
-	// myLogger.Debug("------------- Done!")
+	myLogger.Debug("------------- Done!")
 
 	return string(resp.Msg), nil
 }
 
 func invokeChaincode(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput) (result string, err error) {
-	// myLogger.Debug("------------- invoke...")
+	myLogger.Debug("------------- invoke...")
 	// Get a transaction handler to be used to submit the execute transaction
 	// and bind the chaincode access control logic using the binding
 	submittingCertHandler, err := invoker.GetTCertificateHandlerNext()
@@ -203,6 +199,7 @@ func invokeChaincode(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput) (
 		ChaincodeID: &pb.ChaincodeID{Name: chaincodeName},
 		CtorMsg:     chaincodeInput,
 		// Metadata:             sigma, // Proof of identity
+		// SecureContext:        "admin",
 		ConfidentialityLevel: confidentialityLevel,
 	}
 
@@ -222,15 +219,15 @@ func invokeChaincode(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput) (
 	if resp.Status != pb.Response_SUCCESS {
 		return "", fmt.Errorf("Error invoking chaincode: %s ", string(resp.Msg))
 	}
-	// myLogger.Debugf("Resp [%s]", resp.String())
+	myLogger.Debugf("Resp [%s]", resp.String())
 
-	// myLogger.Debug("------------- Done!")
+	myLogger.Debug("------------- Done!")
 
 	return string(resp.Msg), nil
 }
 
 func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error) {
-	// myLogger.Debug("Query....")
+	myLogger.Debug("Query....")
 
 	// Prepare spec and submit
 	spec := &pb.ChaincodeSpec{
@@ -250,8 +247,8 @@ func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error
 
 	resp, err := processTransaction(transaction)
 
-	// myLogger.Debugf("Resp [%s]", resp.String())
-	// myLogger.Debug("Query....done")
+	myLogger.Debugf("Resp [%s]", resp.String())
+	myLogger.Debug("Query....done")
 
 	if resp.Status != pb.Response_SUCCESS {
 		return "", errors.New(string(resp.Msg))
@@ -261,7 +258,7 @@ func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error
 }
 
 func invokeChaincode2(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClient) (result string, err error) {
-	// myLogger.Debug("------------- invoke...")
+	myLogger.Debug("------------- invoke...")
 	// Get a transaction handler to be used to submit the execute transaction
 	// and bind the chaincode access control logic using the binding
 	submittingCertHandler, err := invoker.GetTCertificateHandlerNext()
@@ -298,15 +295,15 @@ func invokeChaincode2(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput, 
 	if resp.Status != pb.Response_SUCCESS {
 		return "", fmt.Errorf("Error invoking chaincode: %s ", string(resp.Msg))
 	}
-	// myLogger.Debugf("Resp [%s]", resp.String())
+	myLogger.Debugf("Resp [%s]", resp.String())
 
-	// myLogger.Debug("------------- Done!")
+	myLogger.Debug("------------- Done!")
 
 	return string(resp.Msg), nil
 }
 
 func queryChaincode2(chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClient) (result string, err error) {
-	// myLogger.Debug("Query....")
+	myLogger.Debug("Query....")
 
 	// Prepare spec and submit
 	spec := &pb.ChaincodeSpec{
@@ -326,8 +323,8 @@ func queryChaincode2(chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClie
 
 	resp, err := processTransaction2(transaction, serverClient)
 
-	// myLogger.Debugf("Resp [%s]", resp.String())
-	// myLogger.Debug("Query....done")
+	myLogger.Debugf("Resp [%s]", resp.String())
+	myLogger.Debug("Query....done")
 
 	if resp.Status != pb.Response_SUCCESS {
 		return "", errors.New(string(resp.Msg))
@@ -340,7 +337,7 @@ func getChaincodeBytes(spec *pb.ChaincodeSpec) (*pb.ChaincodeDeploymentSpec, err
 	mode := viper.GetString("chaincode.mode")
 	var codePackageBytes []byte
 	if mode != chaincode.DevModeUserRunsChaincode {
-		// myLogger.Debugf("Received build request for chaincode spec: %v", spec)
+		myLogger.Debugf("Received build request for chaincode spec: %v", spec)
 		var err error
 		if err = checkSpec(spec); err != nil {
 			return nil, err
@@ -349,7 +346,7 @@ func getChaincodeBytes(spec *pb.ChaincodeSpec) (*pb.ChaincodeDeploymentSpec, err
 		codePackageBytes, err = container.GetChaincodePackageBytes(spec)
 		if err != nil {
 			err = fmt.Errorf("Error getting chaincode package bytes: %s", err)
-			// myLogger.Errorf("%s", err)
+			myLogger.Errorf("%s", err)
 			return nil, err
 		}
 	}

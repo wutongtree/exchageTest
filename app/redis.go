@@ -46,10 +46,10 @@ func initRedis() {
 	})
 
 	if _, err := client.Ping().Result(); err != nil {
-		// myLogger.Errorf("Connection redis [%s] failed: %s", addr, err)
+		myLogger.Errorf("Connection redis [%s] failed: %s", addr, err)
 		os.Exit(-1)
 	} else {
-		// myLogger.Debugf("Connection redis [%s] successed.", addr)
+		myLogger.Debugf("Connection redis [%s] successed.", addr)
 	}
 }
 

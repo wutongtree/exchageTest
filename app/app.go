@@ -120,7 +120,7 @@ var Multiple = math.Pow10(6)
 
 // Create 创建币
 func (a *AppREST) Create(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing create currency request...")
+	myLogger.Info("REST processing create currency request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -129,7 +129,7 @@ func (a *AppREST) Create(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "Internal JSON error when reading request body"}})
-		// myLogger.Error("Internal JSON error when reading request body.")
+		myLogger.Error("Internal JSON error when reading request body.")
 		return
 	}
 
@@ -137,10 +137,10 @@ func (a *AppREST) Create(rw web.ResponseWriter, req *web.Request) {
 	if string(reqBody) == "" {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "Client must supply a payload for order requests"}})
-		// myLogger.Error("Client must supply a payload for order requests.")
+		myLogger.Error("Client must supply a payload for order requests.")
 		return
 	}
-	// myLogger.Debugf("createCurrency request body :%s", string(reqBody))
+	myLogger.Debugf("createCurrency request body :%s", string(reqBody))
 
 	// Payload must conform to the following structure
 	var currency Currency
@@ -151,7 +151,7 @@ func (a *AppREST) Create(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "request parameter is wrong"}})
-		// myLogger.Errorf("Error unmarshalling order request payload: %s", err)
+		myLogger.Errorf("Error unmarshalling order request payload: %s", err)
 		return
 	}
 
@@ -159,13 +159,13 @@ func (a *AppREST) Create(rw web.ResponseWriter, req *web.Request) {
 	if len(currency.ID) <= 0 {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "Currency cann't be empty"}})
-		// myLogger.Error("Currency cann't be empty.")
+		myLogger.Error("Currency cann't be empty.")
 		return
 	}
 	if currency.Count < 0 {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "Count must be greater than 0"}})
-		// myLogger.Error("Count must be greater than 0.")
+		myLogger.Error("Count must be greater than 0.")
 		return
 	}
 
@@ -174,7 +174,7 @@ func (a *AppREST) Create(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: SYSERR, Msg: "create Currency failed"}})
-		// myLogger.Errorf("create Currency failed:%s", err)
+		myLogger.Errorf("create Currency failed:%s", err)
 		return
 	}
 
@@ -187,7 +187,7 @@ func (a *AppREST) Create(rw web.ResponseWriter, req *web.Request) {
 //				StatusOK OK="1" 成功  不需继续轮询
 //				StatusOK OK="0" 未果  需要继续轮询
 func (a *AppREST) CheckCreate(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing check create request...")
+	myLogger.Info("REST processing check create request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -195,10 +195,10 @@ func (a *AppREST) CheckCreate(rw web.ResponseWriter, req *web.Request) {
 	if txid == "" {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "Client must supply a id for checkcreate requests"}})
-		// myLogger.Errorf("Client must supply a id for checkcreate requests.")
+		myLogger.Errorf("Client must supply a id for checkcreate requests.")
 		return
 	}
-	// myLogger.Debugf("check create request parameter:txid = %s", txid)
+	myLogger.Debugf("check create request parameter:txid = %s", txid)
 
 	v, ok := chaincodeResult[txid]
 	if !ok {
@@ -214,7 +214,7 @@ func (a *AppREST) CheckCreate(rw web.ResponseWriter, req *web.Request) {
 
 // Currency 获取币信息
 func (a *AppREST) Currency(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing get currency request...")
+	myLogger.Info("REST processing get currency request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -222,16 +222,16 @@ func (a *AppREST) Currency(rw web.ResponseWriter, req *web.Request) {
 	if id == "" {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: PARAMERR, Msg: "Currency id can't be empty"}})
-		// myLogger.Error("Get currency failed:Currency id can't be empty")
+		myLogger.Error("Get currency failed:Currency id can't be empty")
 		return
 	}
-	// myLogger.Debugf("Get currency parameter id = %s", id)
+	myLogger.Debugf("Get currency parameter id = %s", id)
 
 	result, err := getCurrency(id)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: SYSERR, Msg: "Get currency failed"}})
-		// myLogger.Errorf("Get currency failed:%s", err)
+		myLogger.Errorf("Get currency failed:%s", err)
 		return
 	}
 
@@ -240,7 +240,7 @@ func (a *AppREST) Currency(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: SYSERR, Msg: "Get currency failed"}})
-		// myLogger.Errorf("Get currency failed:%s", err)
+		myLogger.Errorf("Get currency failed:%s", err)
 		return
 	}
 
@@ -253,7 +253,7 @@ func (a *AppREST) Currency(rw web.ResponseWriter, req *web.Request) {
 
 // Currencys 获取币信息
 func (a *AppREST) Currencys(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing get all currency request...")
+	myLogger.Info("REST processing get all currency request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -261,7 +261,7 @@ func (a *AppREST) Currencys(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: SYSERR, Msg: "Get currency failed"}})
-		// myLogger.Errorf("Get currency failed: %s", err)
+		myLogger.Errorf("Get currency failed: %s", err)
 		return
 	}
 
@@ -270,7 +270,7 @@ func (a *AppREST) Currencys(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: SYSERR, Msg: "Get currency failed"}})
-		// myLogger.Errorf("Get currency failed : %s", err)
+		myLogger.Errorf("Get currency failed : %s", err)
 		return
 	}
 
@@ -292,7 +292,7 @@ type Asset struct {
 
 // Asset 获取个人资产信息
 func (a *AppREST) Asset(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing get currency request...")
+	myLogger.Info("REST processing get currency request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -300,7 +300,7 @@ func (a *AppREST) Asset(rw web.ResponseWriter, req *web.Request) {
 	if owner == "" {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "owner can't be empty"})
-		// myLogger.Errorf("Get asset failed")
+		myLogger.Errorf("Get asset failed")
 		return
 	}
 
@@ -308,7 +308,7 @@ func (a *AppREST) Asset(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Get owner asset failed"})
-		// myLogger.Errorf("Get owner asset failed")
+		myLogger.Errorf("Get owner asset failed")
 		return
 	}
 
@@ -317,7 +317,7 @@ func (a *AppREST) Asset(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Get owner asset failed"})
-		// myLogger.Errorf("Get owner asset failed")
+		myLogger.Errorf("Get owner asset failed")
 		return
 	}
 
@@ -333,7 +333,7 @@ func (a *AppREST) Asset(rw web.ResponseWriter, req *web.Request) {
 
 // MyCurrency 个人创建的币
 func (a *AppREST) MyCurrency(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing get user currency request...")
+	myLogger.Info("REST processing get user currency request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -341,7 +341,7 @@ func (a *AppREST) MyCurrency(rw web.ResponseWriter, req *web.Request) {
 	if user == "" {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "user can't be empty"})
-		// myLogger.Errorf("Get currency failed")
+		myLogger.Errorf("Get currency failed")
 		return
 	}
 
@@ -349,7 +349,7 @@ func (a *AppREST) MyCurrency(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Get currency failed"})
-		// myLogger.Errorf("Get currency failed")
+		myLogger.Errorf("Get currency failed")
 		return
 	}
 
@@ -358,7 +358,7 @@ func (a *AppREST) MyCurrency(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Get currency failed"})
-		// myLogger.Errorf("Get currency failed")
+		myLogger.Errorf("Get currency failed")
 		return
 	}
 
@@ -374,7 +374,7 @@ func (a *AppREST) MyCurrency(rw web.ResponseWriter, req *web.Request) {
 
 // MyTxs 个人挂单记录
 func (a AppREST) MyTxs(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing get user txs request...")
+	myLogger.Info("REST processing get user txs request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -382,7 +382,7 @@ func (a AppREST) MyTxs(rw web.ResponseWriter, req *web.Request) {
 	if user == "" {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "user can't be empty"})
-		// myLogger.Errorf("Get currency failed")
+		myLogger.Errorf("Get currency failed")
 		return
 	}
 
@@ -394,7 +394,7 @@ func (a AppREST) MyTxs(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Get txs failed"})
-		// myLogger.Errorf("Get txs failed")
+		myLogger.Errorf("Get txs failed")
 		return
 	}
 
@@ -420,7 +420,7 @@ func (a AppREST) MyTxs(rw web.ResponseWriter, req *web.Request) {
 
 // Release 发布币
 func (a *AppREST) Release(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing currency release request...")
+	myLogger.Info("REST processing currency release request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -430,7 +430,7 @@ func (a *AppREST) Release(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusInternalServerError)
 		encoder.Encode(restResult{Err: "Internal JSON error when reading request body."})
 
-		// myLogger.Error("Internal JSON error when reading request body.")
+		myLogger.Error("Internal JSON error when reading request body.")
 		return
 	}
 
@@ -439,7 +439,7 @@ func (a *AppREST) Release(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a payload for order requests."})
 
-		// myLogger.Error("Client must supply a payload for order requests.")
+		myLogger.Error("Client must supply a payload for order requests.")
 		return
 	}
 
@@ -453,7 +453,7 @@ func (a *AppREST) Release(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error unmarshalling order request payload: %s", err)})
 
-		// myLogger.Errorf("Error unmarshalling order request payload: %s", err)
+		myLogger.Errorf("Error unmarshalling order request payload: %s", err)
 		return
 	}
 
@@ -462,14 +462,14 @@ func (a *AppREST) Release(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Currency cann't be empty."})
 
-		// myLogger.Error("Currency cann't be empty.")
+		myLogger.Error("Currency cann't be empty.")
 		return
 	}
 	if currency.Count < 0 {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Count must be greater than 0."})
 
-		// myLogger.Error("Count must be greater than 0.")
+		myLogger.Error("Count must be greater than 0.")
 		return
 	}
 
@@ -490,7 +490,7 @@ func (a *AppREST) Release(rw web.ResponseWriter, req *web.Request) {
 //				StatusOK OK="1" 成功  不需继续轮询
 //				StatusOK OK="0" 未果  需要继续轮询
 func (a *AppREST) CheckRelease(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing check release request...")
+	myLogger.Info("REST processing check release request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -499,7 +499,7 @@ func (a *AppREST) CheckRelease(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a id for checkrelease requests."})
 
-		// myLogger.Errorf("Client must supply a id for checkrelease requests.")
+		myLogger.Errorf("Client must supply a id for checkrelease requests.")
 		return
 	}
 
@@ -517,7 +517,7 @@ func (a *AppREST) CheckRelease(rw web.ResponseWriter, req *web.Request) {
 
 // Assign 分发币
 func (a *AppREST) Assign(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing currency assign request...")
+	myLogger.Info("REST processing currency assign request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -527,7 +527,7 @@ func (a *AppREST) Assign(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusInternalServerError)
 		encoder.Encode(restResult{Err: "Internal JSON error when reading request body."})
 
-		// myLogger.Error("Internal JSON error when reading request body.")
+		myLogger.Error("Internal JSON error when reading request body.")
 		return
 	}
 
@@ -536,7 +536,7 @@ func (a *AppREST) Assign(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a payload for order requests."})
 
-		// myLogger.Error("Client must supply a payload for order requests.")
+		myLogger.Error("Client must supply a payload for order requests.")
 		return
 	}
 
@@ -557,7 +557,7 @@ func (a *AppREST) Assign(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error unmarshalling order request payload: %s", err)})
 
-		// myLogger.Errorf("Error unmarshalling order request payload: %s", err)
+		myLogger.Errorf("Error unmarshalling order request payload: %s", err)
 		return
 	}
 
@@ -566,7 +566,7 @@ func (a *AppREST) Assign(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Currency cann't be empty."})
 
-		// myLogger.Error("Currency cann't be empty.")
+		myLogger.Error("Currency cann't be empty.")
 		return
 	}
 	for k, v := range assign.Assigns {
@@ -574,7 +574,7 @@ func (a *AppREST) Assign(rw web.ResponseWriter, req *web.Request) {
 			rw.WriteHeader(http.StatusBadRequest)
 			encoder.Encode(restResult{Err: "Count must be greater than 0."})
 
-			// myLogger.Error("Count must be greater than 0.")
+			myLogger.Error("Count must be greater than 0.")
 			return
 		}
 		assign.Assigns[k].Count = int64(float64(v.Count) * Multiple)
@@ -598,7 +598,7 @@ func (a *AppREST) Assign(rw web.ResponseWriter, req *web.Request) {
 //				StatusOK OK="1" 成功  不需继续轮询
 //				StatusOK OK="0" 未果  需要继续轮询
 func (a *AppREST) CheckAssign(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing check assign request...")
+	myLogger.Info("REST processing check assign request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -607,7 +607,7 @@ func (a *AppREST) CheckAssign(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a id for checkassign requests."})
 
-		// myLogger.Errorf("Client must supply a id for checkassign requests.")
+		myLogger.Errorf("Client must supply a id for checkassign requests.")
 		return
 	}
 
@@ -625,7 +625,7 @@ func (a *AppREST) CheckAssign(rw web.ResponseWriter, req *web.Request) {
 
 // Exchange 挂单
 func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing order request...")
+	myLogger.Info("REST processing order request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -635,7 +635,7 @@ func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusInternalServerError)
 		encoder.Encode(restResult{Err: "Internal JSON error when reading request body."})
 
-		// myLogger.Error("Internal JSON error when reading request body.")
+		myLogger.Error("Internal JSON error when reading request body.")
 		return
 	}
 
@@ -644,7 +644,7 @@ func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a payload for order requests."})
 
-		// myLogger.Error("Client must supply a payload for order requests.")
+		myLogger.Error("Client must supply a payload for order requests.")
 		return
 	}
 
@@ -658,7 +658,7 @@ func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error unmarshalling order request payload: %s", err)})
 
-		// myLogger.Errorf("Error unmarshalling order request payload: %s", err)
+		myLogger.Errorf("Error unmarshalling order request payload: %s", err)
 		return
 	}
 
@@ -667,35 +667,35 @@ func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Account cann't be empty."})
 
-		// myLogger.Error("Account cann't be empty.")
+		myLogger.Error("Account cann't be empty.")
 		return
 	}
 	if len(order.SrcCurrency) <= 0 {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "SrcCurrency cann't be empty."})
 
-		// myLogger.Error("SrcCurrency cann't be empty.")
+		myLogger.Error("SrcCurrency cann't be empty.")
 		return
 	}
 	if len(order.DesCurrency) <= 0 {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "DesCurrency cann't be empty."})
 
-		// myLogger.Error("DesCurrency cann't be empty.")
+		myLogger.Error("DesCurrency cann't be empty.")
 		return
 	}
 	if order.SrcCount <= 0 {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "SrcCount must be greater than 0."})
 
-		// myLogger.Error("SrcCount must be greater than 0.")
+		myLogger.Error("SrcCount must be greater than 0.")
 		return
 	}
 	if order.DesCount <= 0 {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "DesCount must be greater than 0."})
 
-		// myLogger.Error("DesCount must be greater than 0.")
+		myLogger.Error("DesCount must be greater than 0.")
 		return
 	}
 
@@ -711,7 +711,7 @@ func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-		// myLogger.Errorf("Error redis operation: %s", err)
+		myLogger.Errorf("Error redis operation: %s", err)
 		return
 	}
 
@@ -720,11 +720,11 @@ func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-		// myLogger.Errorf("Error redis operation: %s", err)
+		myLogger.Errorf("Error redis operation: %s", err)
 		return
 	}
 
-	// myLogger.Debugf("挂单信息: %+v", order)
+	myLogger.Debugf("挂单信息: %+v", order)
 
 	rw.WriteHeader(http.StatusOK)
 	encoder.Encode(restResult{OK: uuid})
@@ -735,7 +735,7 @@ func (a *AppREST) Exchange(rw web.ResponseWriter, req *web.Request) {
 //				StatusOK OK="1"   挂单成功  不需继续轮询
 //				StatusOK OK="0"   未果 需要继续轮询
 func (a *AppREST) CheckOrder(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing check order request...")
+	myLogger.Info("REST processing check order request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -744,7 +744,7 @@ func (a *AppREST) CheckOrder(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a id for checkorder requests."})
 
-		// myLogger.Errorf("Client must supply a id for checkorder requests.")
+		myLogger.Errorf("Client must supply a id for checkorder requests.")
 		return
 	}
 
@@ -754,14 +754,14 @@ func (a *AppREST) CheckOrder(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-		// myLogger.Errorf("Error redis operation: %s", err)
+		myLogger.Errorf("Error redis operation: %s", err)
 		return
 	}
 	if is {
 		rw.WriteHeader(http.StatusOK)
 		encoder.Encode(restResult{OK: "1"})
 
-		// myLogger.Debugf("%s 挂单成功", uuid)
+		myLogger.Debugf("%s 挂单成功", uuid)
 
 		return
 	}
@@ -772,7 +772,7 @@ func (a *AppREST) CheckOrder(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-		// myLogger.Errorf("Error redis operation: %s", err)
+		myLogger.Errorf("Error redis operation: %s", err)
 		return
 	}
 	if is {
@@ -781,14 +781,14 @@ func (a *AppREST) CheckOrder(rw web.ResponseWriter, req *web.Request) {
 			rw.WriteHeader(http.StatusBadRequest)
 			encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-			// myLogger.Errorf("Error redis operation: %s", err)
+			myLogger.Errorf("Error redis operation: %s", err)
 			return
 		}
 
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: order.Metadata})
 
-		// myLogger.Debugf("%s 挂单失败", uuid)
+		myLogger.Debugf("%s 挂单失败", uuid)
 
 		//如果检测到挂单失败，则将该挂单相关信息清除，因为失败的挂单相当于未保存到系统
 		go clearFailedOrder(uuid)
@@ -802,7 +802,7 @@ func (a *AppREST) CheckOrder(rw web.ResponseWriter, req *web.Request) {
 
 // Cancel 撤单
 func (a *AppREST) Cancel(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing cancel order request...")
+	myLogger.Info("REST processing cancel order request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -812,7 +812,7 @@ func (a *AppREST) Cancel(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusInternalServerError)
 		encoder.Encode(restResult{Err: "Internal JSON error when reading request body."})
 
-		// myLogger.Error("Internal JSON error when reading request body.")
+		myLogger.Error("Internal JSON error when reading request body.")
 		return
 	}
 
@@ -822,7 +822,7 @@ func (a *AppREST) Cancel(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a payload for order requests."})
 
-		// myLogger.Error("Client must supply a payload for order requests.")
+		myLogger.Error("Client must supply a payload for order requests.")
 		return
 	}
 
@@ -838,7 +838,7 @@ func (a *AppREST) Cancel(rw web.ResponseWriter, req *web.Request) {
 	// 	rw.WriteHeader(http.StatusBadRequest)
 	// 	encoder.Encode(restResult{Err: fmt.Sprintf("Error unmarshalling order request payload: %s", err)})
 
-	// 	// myLogger.Errorf("Error unmarshalling order request payload: %s", err)
+	// 	myLogger.Errorf("Error unmarshalling order request payload: %s", err)
 	// 	return
 	// }
 
@@ -846,7 +846,7 @@ func (a *AppREST) Cancel(rw web.ResponseWriter, req *web.Request) {
 	// 	rw.WriteHeader(http.StatusBadRequest)
 	// 	encoder.Encode(restResult{Err: "UUID cann't be empty."})
 
-	// 	// myLogger.Error("UUID cann't be empty.")
+	// 	myLogger.Error("UUID cann't be empty.")
 	// 	return
 	// }
 
@@ -862,14 +862,14 @@ func (a *AppREST) Cancel(rw web.ResponseWriter, req *web.Request) {
 			rw.WriteHeader(http.StatusBadRequest)
 			encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-			// myLogger.Errorf("Error redis operation: %s", err)
+			myLogger.Errorf("Error redis operation: %s", err)
 			return
 		}
 	} else {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Can't cancel order"})
 
-		// myLogger.Errorf("Error redis operation: %s", err)
+		myLogger.Errorf("Error redis operation: %s", err)
 		return
 	}
 
@@ -882,7 +882,7 @@ func (a *AppREST) Cancel(rw web.ResponseWriter, req *web.Request) {
 //				StatusOK OK="1" 撤单成功  不需继续轮询
 //				StatusOK OK="0" 未果 需要继续轮询
 func (a *AppREST) CheckCancel(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Info("REST processing check order cancel request...")
+	myLogger.Info("REST processing check order cancel request...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -891,7 +891,7 @@ func (a *AppREST) CheckCancel(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: "Client must supply a id for checkorder requests."})
 
-		// myLogger.Errorf("Client must supply a id for checkorder requests.")
+		myLogger.Errorf("Client must supply a id for checkorder requests.")
 		return
 	}
 
@@ -901,14 +901,14 @@ func (a *AppREST) CheckCancel(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-		// myLogger.Errorf("Error redis operation: %s", err)
+		myLogger.Errorf("Error redis operation: %s", err)
 		return
 	}
 	if is {
 		rw.WriteHeader(http.StatusOK)
 		encoder.Encode(restResult{OK: "1"})
 
-		// myLogger.Debugf("%s 撤单成功", uuid)
+		myLogger.Debugf("%s 撤单成功", uuid)
 
 		return
 	}
@@ -919,7 +919,7 @@ func (a *AppREST) CheckCancel(rw web.ResponseWriter, req *web.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-		// myLogger.Errorf("Error redis operation: %s", err)
+		myLogger.Errorf("Error redis operation: %s", err)
 		return
 	}
 	if is {
@@ -928,14 +928,14 @@ func (a *AppREST) CheckCancel(rw web.ResponseWriter, req *web.Request) {
 			rw.WriteHeader(http.StatusBadRequest)
 			encoder.Encode(restResult{Err: fmt.Sprintf("Error redis operation: %s", err)})
 
-			// myLogger.Errorf("Error redis operation: %s", err)
+			myLogger.Errorf("Error redis operation: %s", err)
 			return
 		}
 
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResult{Err: order.Metadata})
 
-		// myLogger.Debugf("%s 撤单失败", uuid)
+		myLogger.Debugf("%s 撤单失败", uuid)
 
 		return
 	}
@@ -963,15 +963,15 @@ func (s *AppREST) Login(rw web.ResponseWriter, req *web.Request) {
 
 	rw.WriteHeader(http.StatusOK)
 	encoder.Encode(restResp{Status: result})
-	// myLogger.Debug("Logout successful.")
+	myLogger.Debug("Logout successful.")
 
-	// myLogger.Debug("------------- logout Done")
+	myLogger.Debug("------------- logout Done")
 
 	return
 }
 
 func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Debug("------------- logout...")
+	myLogger.Debug("------------- logout...")
 
 	encoder := json.NewEncoder(rw)
 
@@ -979,9 +979,9 @@ func (s *AppREST) Logout(rw web.ResponseWriter, req *web.Request) {
 
 	rw.WriteHeader(http.StatusOK)
 	encoder.Encode(restResp{Status: result})
-	// myLogger.Debug("Logout successful.")
+	myLogger.Debug("Logout successful.")
 
-	// myLogger.Debug("------------- logout Done")
+	myLogger.Debug("------------- logout Done")
 
 	return
 }
@@ -997,14 +997,14 @@ func checkLogin(req *web.Request) (string, error) {
 
 // IsLogin IsLogin
 func (s *AppREST) IsLogin(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Debug("------------- islogin...")
+	myLogger.Debug("------------- islogin...")
 
 	encoder := json.NewEncoder(rw)
 	enrollID, err := checkLogin(req)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: NOTLOGIN, Msg: err.Error()}})
-		// myLogger.Errorf("IsLogout failed: [%s].", err)
+		myLogger.Errorf("IsLogout failed: [%s].", err)
 		return
 	}
 
@@ -1017,22 +1017,22 @@ func (s *AppREST) IsLogin(rw web.ResponseWriter, req *web.Request) {
 			UserInfo: User{EnrollID: enrollID},
 		}})
 
-	// myLogger.Debugf("IsLogout successful for user '%s'.", enrollID)
+	myLogger.Debugf("IsLogout successful for user '%s'.", enrollID)
 
-	// myLogger.Debug("------------- islogin Done")
+	myLogger.Debug("------------- islogin Done")
 
 	return
 }
 
 func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
-	// myLogger.Debug("------------- my...")
+	myLogger.Debug("------------- my...")
 
 	encoder := json.NewEncoder(rw)
 	enrollID, err := checkLogin(req)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: NOTLOGIN, Msg: err.Error()}})
-		// myLogger.Errorf("My failed: [%s].", err)
+		myLogger.Errorf("My failed: [%s].", err)
 		return
 	}
 
@@ -1041,7 +1041,7 @@ func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
 	// if err != nil {
 	// 	rw.WriteHeader(http.StatusBadRequest)
 	// 	encoder.Encode(restResp{Status: FAILED, Msg: respErr{Code: SYSERR, Msg: "Get currency failed"}})
-	// 	// myLogger.Errorf("Get currency failed")
+	// 	myLogger.Errorf("Get currency failed")
 	// 	return
 	// }
 
@@ -1050,7 +1050,7 @@ func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
 	// if err != nil {
 	// 	rw.WriteHeader(http.StatusBadRequest)
 	// 	encoder.Encode(restResp{Status: FAILED, Msg: respErr{Code: SYSERR, Msg: "Get currency failed"}})
-	// 	// myLogger.Errorf("Get currency failed")
+	// 	myLogger.Errorf("Get currency failed")
 	// 	return
 	// }
 
@@ -1064,7 +1064,7 @@ func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		encoder.Encode(restResp{Status: FAILED, Result: respErr{Code: SYSERR, Msg: "Get owner asset failed"}})
-		// myLogger.Errorf("Get owner asset failed")
+		myLogger.Errorf("Get owner asset failed")
 		return
 	}
 
@@ -1073,7 +1073,7 @@ func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
 	// if err != nil {
 	// 	rw.WriteHeader(http.StatusBadRequest)
 	// 	encoder.Encode(restResp{Status: FAILED, Msg: respErr{Code: SYSERR, Msg: "Get owner asset failed"}})
-	// 	// myLogger.Errorf("Get owner asset failed")
+	// 	myLogger.Errorf("Get owner asset failed")
 	// 	return
 	// }
 
@@ -1094,9 +1094,9 @@ func (s *AppREST) My(rw web.ResponseWriter, req *web.Request) {
 		},
 	})
 
-	// myLogger.Debugf("My successful for user '%s'.", enrollID)
+	myLogger.Debugf("My successful for user '%s'.", enrollID)
 
-	// myLogger.Debug("------------- my Done")
+	myLogger.Debug("------------- my Done")
 
 	return
 }

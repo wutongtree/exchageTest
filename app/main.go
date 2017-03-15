@@ -10,7 +10,6 @@ import (
 
 	"github.com/gocraft/web"
 	"github.com/hyperledger/fabric/core/crypto"
-	"github.com/hyperledger/fabric/core/crypto/primitives"
 	"github.com/op/go-logging"
 	"github.com/spf13/viper"
 )
@@ -80,20 +79,18 @@ func main() {
 	// initRedis()
 	// defer client.Close()
 
-	primitives.SetSecurityLevel("SHA3", 256)
+	crypto.Init()
 	if err := initNVP(); err != nil {
-		// myLogger.Debugf("Failed initiliazing NVP [%s]", err)
+		myLogger.Debugf("Failed initiliazing NVP [%s]", err)
 		os.Exit(-1)
 	}
-
-	crypto.Init()
 
 	// Enable fabric 'confidentiality'
 	confidentiality(false)
 
 	// Deploy
 	if err := deploy(); err != nil {
-		// myLogger.Errorf("Failed deploying [%s]", err)
+		myLogger.Errorf("Failed deploying [%s]", err)
 		os.Exit(-1)
 	}
 
@@ -177,7 +174,7 @@ loop1:
 	tlsEnable := viper.GetBool("app.tls.enabled")
 
 	// Initialize the REST service object
-	// myLogger.Infof("Initializing the REST service on %s, TLS is %s.", restAddress, (map[bool]string{true: "enabled", false: "disabled"})[tlsEnable])
+	myLogger.Infof("Initializing the REST service on %s, TLS is %s.", restAddress, (map[bool]string{true: "enabled", false: "disabled"})[tlsEnable])
 
 	router := buildRouter()
 
@@ -185,12 +182,12 @@ loop1:
 	if tlsEnable {
 		err := http.ListenAndServeTLS(restAddress, viper.GetString("app.tls.cert.file"), viper.GetString("app.tls.key.file"), router)
 		if err != nil {
-			// myLogger.Errorf("ListenAndServeTLS: %s", err)
+			myLogger.Errorf("ListenAndServeTLS: %s", err)
 		}
 	} else {
 		err := http.ListenAndServe(restAddress, router)
 		if err != nil {
-			// myLogger.Errorf("ListenAndServe: %s", err)
+			myLogger.Errorf("ListenAndServe: %s", err)
 		}
 	}
 }

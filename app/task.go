@@ -26,7 +26,7 @@ func lockBalance() {
 			continue
 		}
 
-		// myLogger.Debugf("锁定挂单 %s 余额...", uuids)
+		myLogger.Debugf("锁定挂单 %s 余额...", uuids)
 
 		// 2.调用chaincode锁定相关信息
 		lockInfo := getLockInfo(uuids)
@@ -95,14 +95,14 @@ func matchTx() {
 				continue
 			}
 
-			// myLogger.Debugf("%s 的卖出价：%f/%f=%.6f %s", buyOrder.SrcCurrency, buyOrder.DesCount, buyOrder.SrcCount, buyOrder.DesCount/buyOrder.SrcCount, buyOrder.DesCurrency)
-			// myLogger.Debugf("%s 的买入价：%f/%f=%.6f %s", sellOrder.DesCurrency, sellOrder.SrcCount, sellOrder.DesCount, sellOrder.SrcCount/sellOrder.DesCount, sellOrder.SrcCurrency)
+			myLogger.Debugf("%s 的卖出价：%f/%f=%.6f %s", buyOrder.SrcCurrency, buyOrder.DesCount, buyOrder.SrcCount, buyOrder.DesCount/buyOrder.SrcCount, buyOrder.DesCurrency)
+			myLogger.Debugf("%s 的买入价：%f/%f=%.6f %s", sellOrder.DesCurrency, sellOrder.SrcCount, sellOrder.DesCount, sellOrder.SrcCount/sellOrder.DesCount, sellOrder.SrcCurrency)
 			// 5.比较价格，进行撮合
 			if buyOrder.DesCount/buyOrder.SrcCount > sellOrder.SrcCount/sellOrder.DesCount {
 				continue
 			}
 
-			// myLogger.Debugf("匹配成功，买入挂单：%s, 卖出挂单：%s", buyUUID, sellUUID)
+			myLogger.Debugf("匹配成功，买入挂单：%s, 卖出挂单：%s", buyUUID, sellUUID)
 
 			// 6.撮合成功，处理买卖挂单
 			dealMatchOrder(buyOrder, sellOrder, time.Now().Unix())
@@ -127,7 +127,7 @@ func execTx() {
 			continue
 		}
 
-		// myLogger.Debugf("执行撮合好的交易 %s ...", uuids)
+		myLogger.Debugf("执行撮合好的交易 %s ...", uuids)
 
 		// 2.chaincode执行交易
 		exchanges := []*ExchangeOrder{}
@@ -221,7 +221,7 @@ func execExpired(uuid ...string) {
 			continue
 		}
 
-		// myLogger.Debugf("处理过期挂单 %s ...", uuids)
+		myLogger.Debugf("处理过期挂单 %s ...", uuids)
 
 		// 2.chaincode处理过期交易
 		lockInfo := getLockInfo(uuids)
@@ -271,7 +271,7 @@ func checkExpired(uuid string) (*Order, bool) {
 
 	if order.ExpiredTime > 0 && order.ExpiredTime <= time.Now().Unix() {
 		dealExpired(uuid)
-		// myLogger.Debugf("挂单 %s 已过期", uuid)
+		myLogger.Debugf("挂单 %s 已过期", uuid)
 
 		return nil, true
 	}
@@ -289,7 +289,7 @@ func execCancel() {
 			continue
 		}
 
-		// myLogger.Debugf("处理撤销挂单 %s ...", uuids)
+		myLogger.Debugf("处理撤销挂单 %s ...", uuids)
 
 		// 2.chaincode处理撤销交易
 		lockInfo := getLockInfo(uuids)
