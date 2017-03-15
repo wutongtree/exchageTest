@@ -6,7 +6,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gocraft/web"
 	"github.com/hyperledger/fabric/core/crypto"
@@ -94,67 +93,69 @@ func main() {
 		os.Exit(-1)
 	}
 
-	time.Sleep(time.Second * 20)
+	// time.Sleep(time.Second * 20)
 	max := 5000
 
-	loginChan := make(chan int, max)
-	sum := 1
-	err := 0
-	start, end := time.Now().Unix(), time.Now().Unix()
+	// loginChan := make(chan int, max)
+	// sum := 1
+	// err := 0
+	// start, end := time.Now().Unix(), time.Now().Unix()
 
 	for i := 0; i < max; i++ {
 		go func(j int) {
-			// clientConn, _ := peer.NewPeerClientConnection()
-			// serverClient := pb.NewPeerClient(clientConn)
-			TestCurrency("t"+strconv.Itoa(j), strconv.Itoa(j), "binhn", loginChan)
+			TestCurrency2("t"+strconv.Itoa(j), strconv.Itoa(j), "admin")
 		}(i)
-	}
 
-loop1:
-	for {
-		select {
-		case flag := <-loginChan:
-			if flag == 1 {
-				err++
-			}
-			if sum == max {
-				end = time.Now().Unix()
-				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
-				break loop1
-				// return
-			}
-			sum++
-		}
-	}
-
-	time.Sleep(time.Second * 20)
-
-	createChan := make(chan int, max)
-	for i := 0; i < max; i++ {
 		go func(j int) {
-			TestgetCurrency("t"+strconv.Itoa(j), createChan)
+			TestgetCurrency2("t" + strconv.Itoa(j))
 		}(i)
 	}
-	sum1 := 1
-	err1 := 0
-	start1, end1 := time.Now().Unix(), time.Now().Unix()
 
-	for {
-		select {
-		case flag := <-createChan:
-			if flag == 1 {
-				err1++
-			}
-			// fmt.Println(sum1)
-			if sum1 == max {
-				end1 = time.Now().Unix()
-				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
-				fmt.Println("*****************", err1, end1-start1, float64(max)/float64(end1-start1))
-				return
-			}
-			sum1++
-		}
-	}
+	// loop1:
+	// 	for {
+	// 		select {
+	// 		case flag := <-loginChan:
+	// 			if flag == 1 {
+	// 				err++
+	// 			}
+	// 			if sum == max {
+	// 				end = time.Now().Unix()
+	// 				fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
+	// 				break loop1
+	// 				// return
+	// 			}
+	// 			sum++
+	// 		}
+	// 	}
+
+	// 	time.Sleep(time.Second * 20)
+
+	// createChan := make(chan int, max)
+	// for i := 0; i < max; i++ {
+	// 	go func(j int) {
+	// 		TestgetCurrency2("t" + strconv.Itoa(j))
+	// 	}(i)
+	// }
+	// sum1 := 1
+	// err1 := 0
+	// start1, end1 := time.Now().Unix(), time.Now().Unix()
+
+	// for {
+	// 	select {
+	// 	case flag := <-createChan:
+	// 		if flag == 1 {
+	// 			err1++
+	// 		}
+	// 		// fmt.Println(sum1)
+	// 		if sum1 == max {
+	// 			end1 = time.Now().Unix()
+	// 			fmt.Println("*****************", err, end-start, float64(max)/float64(end-start))
+	// 			fmt.Println("*****************", err1, end1-start1, float64(max)/float64(end1-start1))
+	// 			return
+	// 		}
+	// 		sum1++
+	// 	}
+	// }
 
 	// go eventListener(chaincodeName)
 
