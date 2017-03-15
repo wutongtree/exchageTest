@@ -25,13 +25,13 @@ var (
 
 func initNVP() (err error) {
 	if err = initPeerClient(); err != nil {
-		myLogger.Debugf("Failed initNVP [%s]", err)
+		// myLogger.Debugf("Failed initNVP [%s]", err)
 		return
 	}
 
 	adminInvoker, err = setCryptoClient("admin", "Xurw3yU9zI0l")
 	if err != nil {
-		myLogger.Errorf("Failed getting invoker [%s]", err)
+		// myLogger.Errorf("Failed getting invoker [%s]", err)
 		return
 	}
 
@@ -112,10 +112,10 @@ func deployInternal() (resp *pb.Response, err error) {
 
 	resp, err = processTransaction(transaction)
 
-	myLogger.Debugf("resp [%s]", resp.String())
+	// myLogger.Debugf("resp [%s]", resp.String())
 
 	chaincodeName = cds.ChaincodeSpec.ChaincodeID.Name
-	myLogger.Debugf("ChaincodeName [%s]", chaincodeName)
+	// myLogger.Debugf("ChaincodeName [%s]", chaincodeName)
 
 	return
 }
@@ -173,7 +173,7 @@ func invokeChaincodeSigma(invoker crypto.Client, invokerCert crypto.CertificateH
 	if resp.Status != pb.Response_SUCCESS {
 		return "", fmt.Errorf("Error invoking chaincode: %s ", string(resp.Msg))
 	}
-	myLogger.Debugf("Resp [%s]", resp.String())
+	// myLogger.Debugf("Resp [%s]", resp.String())
 
 	myLogger.Debug("------------- Done!")
 
@@ -219,7 +219,7 @@ func invokeChaincode(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput) (
 	if resp.Status != pb.Response_SUCCESS {
 		return "", fmt.Errorf("Error invoking chaincode: %s ", string(resp.Msg))
 	}
-	myLogger.Debugf("Resp [%s]", resp.String())
+	// myLogger.Debugf("Resp [%s]", resp.String())
 
 	myLogger.Debug("------------- Done!")
 
@@ -247,7 +247,7 @@ func queryChaincode(chaincodeInput *pb.ChaincodeInput) (result string, err error
 
 	resp, err := processTransaction(transaction)
 
-	myLogger.Debugf("Resp [%s]", resp.String())
+	// myLogger.Debugf("Resp [%s]", resp.String())
 	myLogger.Debug("Query....done")
 
 	if resp.Status != pb.Response_SUCCESS {
@@ -295,7 +295,7 @@ func invokeChaincode2(invoker crypto.Client, chaincodeInput *pb.ChaincodeInput, 
 	if resp.Status != pb.Response_SUCCESS {
 		return "", fmt.Errorf("Error invoking chaincode: %s ", string(resp.Msg))
 	}
-	myLogger.Debugf("Resp [%s]", resp.String())
+	// myLogger.Debugf("Resp [%s]", resp.String())
 
 	myLogger.Debug("------------- Done!")
 
@@ -323,7 +323,7 @@ func queryChaincode2(chaincodeInput *pb.ChaincodeInput, serverClient pb.PeerClie
 
 	resp, err := processTransaction2(transaction, serverClient)
 
-	myLogger.Debugf("Resp [%s]", resp.String())
+	// myLogger.Debugf("Resp [%s]", resp.String())
 	myLogger.Debug("Query....done")
 
 	if resp.Status != pb.Response_SUCCESS {
@@ -337,7 +337,7 @@ func getChaincodeBytes(spec *pb.ChaincodeSpec) (*pb.ChaincodeDeploymentSpec, err
 	mode := viper.GetString("chaincode.mode")
 	var codePackageBytes []byte
 	if mode != chaincode.DevModeUserRunsChaincode {
-		myLogger.Debugf("Received build request for chaincode spec: %v", spec)
+		// myLogger.Debugf("Received build request for chaincode spec: %v", spec)
 		var err error
 		if err = checkSpec(spec); err != nil {
 			return nil, err
@@ -346,7 +346,7 @@ func getChaincodeBytes(spec *pb.ChaincodeSpec) (*pb.ChaincodeDeploymentSpec, err
 		codePackageBytes, err = container.GetChaincodePackageBytes(spec)
 		if err != nil {
 			err = fmt.Errorf("Error getting chaincode package bytes: %s", err)
-			myLogger.Errorf("%s", err)
+			// myLogger.Errorf("%s", err)
 			return nil, err
 		}
 	}

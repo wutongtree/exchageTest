@@ -81,7 +81,7 @@ func main() {
 
 	crypto.Init()
 	if err := initNVP(); err != nil {
-		myLogger.Debugf("Failed initiliazing NVP [%s]", err)
+		// myLogger.Debugf("Failed initiliazing NVP [%s]", err)
 		os.Exit(-1)
 	}
 
@@ -90,7 +90,7 @@ func main() {
 
 	// Deploy
 	if err := deploy(); err != nil {
-		myLogger.Errorf("Failed deploying [%s]", err)
+		// myLogger.Errorf("Failed deploying [%s]", err)
 		os.Exit(-1)
 	}
 
@@ -182,12 +182,12 @@ loop1:
 	if tlsEnable {
 		err := http.ListenAndServeTLS(restAddress, viper.GetString("app.tls.cert.file"), viper.GetString("app.tls.key.file"), router)
 		if err != nil {
-			myLogger.Errorf("ListenAndServeTLS: %s", err)
+			// myLogger.Errorf("ListenAndServeTLS: %s", err)
 		}
 	} else {
 		err := http.ListenAndServe(restAddress, router)
 		if err != nil {
-			myLogger.Errorf("ListenAndServe: %s", err)
+			// myLogger.Errorf("ListenAndServe: %s", err)
 		}
 	}
 }

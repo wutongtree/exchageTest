@@ -77,13 +77,13 @@ func (c *ExchangeChaincode) Init(stub shim.ChaincodeStubInterface, function stri
 
 	err := c.createTable()
 	if err != nil {
-		myLogger.Errorf("Init error1:%s", err)
+		// myLogger.Errorf("Init error1:%s", err)
 		return nil, err
 	}
 
 	err = c.initTable()
 	if err != nil {
-		myLogger.Errorf("Init error2:%s", err)
+		// myLogger.Errorf("Init error2:%s", err)
 		return nil, err
 	}
 
@@ -102,7 +102,7 @@ func (c *ExchangeChaincode) createTable() error {
 		&shim.ColumnDefinition{Name: "CreateTime", Type: shim.ColumnDefinition_INT64, Key: false},
 	})
 	if err != nil {
-		myLogger.Errorf("createTable error1:%s", err)
+		// myLogger.Errorf("createTable error1:%s", err)
 		return err //errors.New("Failed creating Currency table.")
 	}
 
@@ -113,7 +113,7 @@ func (c *ExchangeChaincode) createTable() error {
 		&shim.ColumnDefinition{Name: "ReleaseTime", Type: shim.ColumnDefinition_INT64, Key: true},
 	})
 	if err != nil {
-		myLogger.Errorf("createTable error2:%s", err)
+		// myLogger.Errorf("createTable error2:%s", err)
 		return errors.New("Failed creating CurrencyReleaseLog table.")
 	}
 
@@ -125,7 +125,7 @@ func (c *ExchangeChaincode) createTable() error {
 		&shim.ColumnDefinition{Name: "AssignTime", Type: shim.ColumnDefinition_INT64, Key: true},
 	})
 	if err != nil {
-		myLogger.Errorf("createTable error3:%s", err)
+		// myLogger.Errorf("createTable error3:%s", err)
 		return errors.New("Failed creating CurrencyAssignLog table.")
 	}
 
@@ -137,7 +137,7 @@ func (c *ExchangeChaincode) createTable() error {
 		&shim.ColumnDefinition{Name: "LockCount", Type: shim.ColumnDefinition_INT64, Key: false},
 	})
 	if err != nil {
-		myLogger.Errorf("createTable error4:%s", err)
+		// myLogger.Errorf("createTable error4:%s", err)
 		return errors.New("Failed creating Assets table.")
 	}
 
@@ -151,7 +151,7 @@ func (c *ExchangeChaincode) createTable() error {
 		&shim.ColumnDefinition{Name: "LockTime", Type: shim.ColumnDefinition_INT64, Key: false},
 	})
 	if err != nil {
-		myLogger.Errorf("createTable error5:%s", err)
+		// myLogger.Errorf("createTable error5:%s", err)
 		return errors.New("Failed creating AssetLockLog table.")
 	}
 
@@ -164,7 +164,7 @@ func (c *ExchangeChaincode) createTable() error {
 		&shim.ColumnDefinition{Name: "Detail", Type: shim.ColumnDefinition_BYTES, Key: true},
 	})
 	if err != nil {
-		myLogger.Errorf("createTable error6:%s", err)
+		// myLogger.Errorf("createTable error6:%s", err)
 		return errors.New("Failed creating TxLog table.")
 	}
 
@@ -174,7 +174,7 @@ func (c *ExchangeChaincode) createTable() error {
 		&shim.ColumnDefinition{Name: "Detail", Type: shim.ColumnDefinition_BYTES, Key: false},
 	})
 	if err != nil {
-		myLogger.Errorf("createTable error7:%s", err)
+		// myLogger.Errorf("createTable error7:%s", err)
 		return errors.New("Failed creating TxLo2s table.")
 	}
 
@@ -194,7 +194,7 @@ func (c *ExchangeChaincode) initTable() error {
 		return fmt.Errorf("Failed initiliazing Currency CNY.")
 	}
 	if err != nil {
-		myLogger.Errorf("initTable error2:%s", err)
+		// myLogger.Errorf("initTable error2:%s", err)
 		return fmt.Errorf("Failed initiliazing Currency CNY: [%s]", err)
 	}
 
@@ -209,7 +209,7 @@ func (c *ExchangeChaincode) initTable() error {
 		return fmt.Errorf("Failed initiliazing Currency USD.")
 	}
 	if err != nil {
-		myLogger.Errorf("initTable error2:%s", err)
+		// myLogger.Errorf("initTable error2:%s", err)
 		return fmt.Errorf("Failed initiliazing Currency USD: [%s]", err)
 	}
 
@@ -252,7 +252,7 @@ func (c *ExchangeChaincode) createCurrency() ([]byte, error) {
 	count, _ := strconv.ParseInt(c.args[1], 10, 64)
 	// creator, err := base64.StdEncoding.DecodeString(c.args[2])
 	// if err != nil {
-	// 	myLogger.Errorf("createCurrency error1:%s", err)
+	// 	// myLogger.Errorf("createCurrency error1:%s", err)
 	// 	return nil, errors.New("Failed decodinf creator")
 	// }
 	creator := c.args[2]
@@ -269,7 +269,7 @@ func (c *ExchangeChaincode) createCurrency() ([]byte, error) {
 			},
 		})
 	if err != nil {
-		myLogger.Errorf("createCurrency error2:%s", err)
+		// myLogger.Errorf("createCurrency error2:%s", err)
 		return nil, errors.New("Failed inserting row.")
 	}
 	if !ok {
@@ -286,7 +286,7 @@ func (c *ExchangeChaincode) createCurrency() ([]byte, error) {
 				},
 			})
 		if err != nil {
-			myLogger.Errorf("createCurrency error3:%s", err)
+			// myLogger.Errorf("createCurrency error3:%s", err)
 			return nil, errors.New("Failed inserting row.")
 		}
 		if !ok {
@@ -316,17 +316,17 @@ func (c *ExchangeChaincode) releaseCurrency() ([]byte, error) {
 
 	row, curr, err := c.getCurrencyByID(id)
 	if err != nil {
-		myLogger.Errorf("releaseCurrency error1:%s", err)
+		// myLogger.Errorf("releaseCurrency error1:%s", err)
 		return nil, fmt.Errorf("Failed retrieving currency [%s]: [%s]", id, err)
 	}
 	if curr == nil {
 		return nil, fmt.Errorf("Can't find currency [%s]", id)
 	}
 
-	myLogger.Debugf("Creator of [%s] is [% x]", id, curr.Creator)
+	// myLogger.Debugf("Creator of [%s] is [% x]", id, curr.Creator)
 	// ok, err := c.isCreator(curr.Creator)
 	// if err != nil {
-	// 	myLogger.Errorf("releaseCurrency error2:%s", err)
+	// 	// myLogger.Errorf("releaseCurrency error2:%s", err)
 	// 	return nil, errors.New("Failed checking currency creator identity")
 	// }
 	// if !ok {
@@ -342,7 +342,7 @@ func (c *ExchangeChaincode) releaseCurrency() ([]byte, error) {
 
 	ok, err := c.stub.ReplaceRow(TableCurrency, row)
 	if err != nil {
-		myLogger.Errorf("releaseCurrency error3:%s", err)
+		// myLogger.Errorf("releaseCurrency error3:%s", err)
 		return nil, fmt.Errorf("Failed replacing row [%s]", err)
 	}
 	if !ok {
@@ -358,7 +358,7 @@ func (c *ExchangeChaincode) releaseCurrency() ([]byte, error) {
 			},
 		})
 	if err != nil {
-		myLogger.Errorf("releaseCurrency error4:%s", err)
+		// myLogger.Errorf("releaseCurrency error4:%s", err)
 		return nil, errors.New("Failed inserting row.")
 	}
 	if !ok {
@@ -388,7 +388,7 @@ func (c *ExchangeChaincode) assignCurrency() ([]byte, error) {
 
 	err := json.Unmarshal([]byte(c.args[0]), &assign)
 	if err != nil {
-		myLogger.Errorf("assignCurrency error1:%s", err)
+		// myLogger.Errorf("assignCurrency error1:%s", err)
 		return nil, fmt.Errorf("Failed unmarshalling assign data [%s]", err)
 	}
 
@@ -398,17 +398,17 @@ func (c *ExchangeChaincode) assignCurrency() ([]byte, error) {
 
 	row, curr, err := c.getCurrencyByID(assign.Currency)
 	if err != nil {
-		myLogger.Errorf("assignCurrency error2:%s", err)
+		// myLogger.Errorf("assignCurrency error2:%s", err)
 		return nil, fmt.Errorf("Failed retrieving currency [%s]: [%s]", assign.Currency, err)
 	}
 	if curr == nil {
 		return nil, fmt.Errorf("Can't find currency [%s]", assign.Currency)
 	}
-	myLogger.Debugf("Creator of [%s] is [% x]", assign.Currency, curr.Creator)
+	// myLogger.Debugf("Creator of [%s] is [% x]", assign.Currency, curr.Creator)
 
 	// ok, err := c.isCreator(curr.Creator)
 	// if err != nil {
-	// 	myLogger.Errorf("assignCurrency error3:%s", err)
+	// 	// myLogger.Errorf("assignCurrency error3:%s", err)
 	// 	return nil, errors.New("Failed checking currency creator identity")
 	// }
 	// if !ok {
@@ -430,7 +430,7 @@ func (c *ExchangeChaincode) assignCurrency() ([]byte, error) {
 
 		// owner, err := base64.StdEncoding.DecodeString(v.Owner)
 		// if err != nil {
-		// 	myLogger.Errorf("assignCurrency error4:%s", err)
+		// 	// myLogger.Errorf("assignCurrency error4:%s", err)
 		// 	return nil, errors.New("Failed decodinf owner")
 		// }
 		owner := v.Owner
@@ -444,13 +444,13 @@ func (c *ExchangeChaincode) assignCurrency() ([]byte, error) {
 				},
 			})
 		if err != nil {
-			myLogger.Errorf("assignCurrency error5:%s", err)
+			// myLogger.Errorf("assignCurrency error5:%s", err)
 			return nil, errors.New("Failed inserting row.")
 		}
 
 		assetRow, asset, err := c.getOwnerOneAsset(owner, assign.Currency)
 		if err != nil {
-			myLogger.Errorf("assignCurrency error6:%s", err)
+			// myLogger.Errorf("assignCurrency error6:%s", err)
 			return nil, fmt.Errorf("Failed retrieving asset [%s] of the user: [%s]", assign.Currency, err)
 		}
 		if len(assetRow.Columns) == 0 {
@@ -464,7 +464,7 @@ func (c *ExchangeChaincode) assignCurrency() ([]byte, error) {
 					},
 				})
 			if err != nil {
-				myLogger.Errorf("assignCurrency error7:%s", err)
+				// myLogger.Errorf("assignCurrency error7:%s", err)
 				return nil, errors.New("Failed inserting row.")
 			}
 		} else {
@@ -472,7 +472,7 @@ func (c *ExchangeChaincode) assignCurrency() ([]byte, error) {
 			_, err = c.stub.ReplaceRow(TableAssets, assetRow)
 		}
 		if err != nil {
-			myLogger.Errorf("assignCurrency error8:%s", err)
+			// myLogger.Errorf("assignCurrency error8:%s", err)
 			return nil, errors.New("Failed updating row.")
 		}
 
@@ -483,7 +483,7 @@ func (c *ExchangeChaincode) assignCurrency() ([]byte, error) {
 		row.Columns[2].Value = &shim.Column_Int64{Int64: curr.LeftCount}
 		_, err = c.stub.ReplaceRow(TableCurrency, row)
 		if err != nil {
-			myLogger.Errorf("assignCurrency error9:%s", err)
+			// myLogger.Errorf("assignCurrency error9:%s", err)
 			return nil, errors.New("Failed updating row.")
 		}
 	}
@@ -522,7 +522,7 @@ func (c *ExchangeChaincode) lock() ([]byte, error) {
 
 	err := json.Unmarshal([]byte(c.args[0]), &lockInfos)
 	if err != nil {
-		myLogger.Errorf("lock error1:%s", err)
+		// myLogger.Errorf("lock error1:%s", err)
 		return nil, err
 	}
 	islock, _ := strconv.ParseBool(c.args[1])
@@ -533,7 +533,7 @@ func (c *ExchangeChaincode) lock() ([]byte, error) {
 	for _, v := range lockInfos {
 		// owner, err := base64.StdEncoding.DecodeString(v.Owner)
 		// if err != nil {
-		// 	myLogger.Errorf("lock error2:%s", err)
+		// 	// myLogger.Errorf("lock error2:%s", err)
 		// 	failInfos = append(failInfos, FailInfo{Id: v.OrderId, Info: "Failed decodinf owner"})
 		// 	continue
 		// }
@@ -545,7 +545,7 @@ func (c *ExchangeChaincode) lock() ([]byte, error) {
 			failInfos = append(failInfos, FailInfo{Id: v.OrderId, Info: err.Error()})
 			continue
 		} else if errType == WorldStateErr {
-			myLogger.Errorf("lock error3:%s", err)
+			// myLogger.Errorf("lock error3:%s", err)
 			return nil, err
 		}
 		successInfos = append(successInfos, v.OrderId)
@@ -554,7 +554,7 @@ func (c *ExchangeChaincode) lock() ([]byte, error) {
 	batch := BatchResult{EventName: "chaincode_lock", Success: successInfos, Fail: failInfos, SrcMethod: c.args[2]}
 	result, err := json.Marshal(&batch)
 	if err != nil {
-		myLogger.Errorf("lock error4:%s", err)
+		// myLogger.Errorf("lock error4:%s", err)
 		return nil, err
 	}
 	c.stub.SetEvent(batch.EventName, result)
@@ -596,7 +596,7 @@ func (c *ExchangeChaincode) exchange() ([]byte, error) {
 	}
 	err := json.Unmarshal([]byte(c.args[0]), &exchangeOrders)
 	if err != nil {
-		myLogger.Errorf("exchange error1:%s", err)
+		// myLogger.Errorf("exchange error1:%s", err)
 		return nil, errors.New("Failed unmarshalling order")
 	}
 
@@ -622,13 +622,13 @@ func (c *ExchangeChaincode) exchange() ([]byte, error) {
 		// check 是否交易过
 		buyRow, _, err := c.getTxLogByID(buyOrder.UUID)
 		if err != nil || len(buyRow.Columns) > 0 {
-			myLogger.Errorf("exchange error2:%s", err)
+			// myLogger.Errorf("exchange error2:%s", err)
 			failInfos = append(failInfos, FailInfo{Id: matchOrder, Info: err.Error()})
 			continue
 		}
 		sellRow, _, err := c.getTxLogByID(sellOrder.UUID)
 		if err != nil || len(sellRow.Columns) > 0 {
-			myLogger.Errorf("exchange error3:%s", err)
+			// myLogger.Errorf("exchange error3:%s", err)
 			failInfos = append(failInfos, FailInfo{Id: matchOrder, Info: err.Error()})
 			continue
 		}
@@ -638,14 +638,14 @@ func (c *ExchangeChaincode) exchange() ([]byte, error) {
 			failInfos = append(failInfos, FailInfo{Id: matchOrder, Info: err.Error()})
 			continue
 		} else if errType == WorldStateErr {
-			myLogger.Errorf("exchange error4:%s", err)
+			// myLogger.Errorf("exchange error4:%s", err)
 			return nil, err
 		}
 
 		// txlog
 		err = c.saveTxLog(&buyOrder, &sellOrder)
 		if err != nil {
-			myLogger.Errorf("exchange error5:%s", err)
+			// myLogger.Errorf("exchange error5:%s", err)
 			return nil, err
 		}
 
@@ -655,7 +655,7 @@ func (c *ExchangeChaincode) exchange() ([]byte, error) {
 	batch := BatchResult{EventName: "chaincode_exchange", Success: successInfos, Fail: failInfos}
 	result, err := json.Marshal(&batch)
 	if err != nil {
-		myLogger.Errorf("exchange error6:%s", err)
+		// myLogger.Errorf("exchange error6:%s", err)
 		return nil, err
 	}
 	c.stub.SetEvent(batch.EventName, result)
@@ -671,14 +671,14 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 	if buyOrder.IsBuyAll && buyOrder.UUID == buyOrder.RawUUID {
 		unlock, err := c.computeBalance(buyOrder.Account, buyOrder.SrcCurrency, buyOrder.DesCurrency, buyOrder.RawUUID, buyOrder.FinalCost)
 		if err != nil {
-			myLogger.Errorf("execTx error1:%s", err)
+			// myLogger.Errorf("execTx error1:%s", err)
 			return errors.New("Failed compute balance"), CheckErr
 		}
-		myLogger.Debugf("Order %s balance %d", buyOrder.UUID, unlock)
+		// myLogger.Debugf("Order %s balance %d", buyOrder.UUID, unlock)
 		if unlock > 0 {
 			err, errType := c.lockOrUnlockBalance(buyOrder.Account, buyOrder.SrcCurrency, buyOrder.RawUUID, unlock, false)
 			if err != nil {
-				myLogger.Errorf("execTx error2:%s", err)
+				// myLogger.Errorf("execTx error2:%s", err)
 				return errors.New("Failed unlock balance"), errType
 			}
 		}
@@ -687,7 +687,7 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 	// 买单源币锁定数量减少
 	buySrcRow, buySrcAsset, err := c.getOwnerOneAsset(buyOrder.Account, buyOrder.SrcCurrency)
 	if err != nil {
-		myLogger.Errorf("execTx error3:%s", err)
+		// myLogger.Errorf("execTx error3:%s", err)
 		return fmt.Errorf("Failed retrieving asset [%s] of the user: [%s]", buyOrder.SrcCurrency, err), CheckErr
 	}
 	if len(buySrcRow.Columns) == 0 {
@@ -696,14 +696,14 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 	buySrcRow.Columns[3].Value = &shim.Column_Int64{Int64: buySrcAsset.LockCount - buyOrder.FinalCost}
 	_, err = c.stub.ReplaceRow(TableAssets, buySrcRow)
 	if err != nil {
-		myLogger.Errorf("execTx error4:%s", err)
+		// myLogger.Errorf("execTx error4:%s", err)
 		return errors.New("Failed updating row"), WorldStateErr
 	}
 
 	// 买单目标币数量增加
 	buyDesRow, buyDesAsset, err := c.getOwnerOneAsset(buyOrder.Account, buyOrder.DesCurrency)
 	if err != nil {
-		myLogger.Errorf("execTx error5:%s", err)
+		// myLogger.Errorf("execTx error5:%s", err)
 		return fmt.Errorf("Failed retrieving asset [%s] of the user: [%s]", buyOrder.DesCurrency, err), CheckErr
 	}
 	if len(buyDesRow.Columns) == 0 {
@@ -717,14 +717,14 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 				},
 			})
 		if err != nil {
-			myLogger.Errorf("execTx error6:%s", err)
+			// myLogger.Errorf("execTx error6:%s", err)
 			return errors.New("Failed inserting row"), WorldStateErr
 		}
 	} else {
 		buyDesRow.Columns[2].Value = &shim.Column_Int64{Int64: buyDesAsset.Count + buyOrder.DesCount}
 		_, err = c.stub.ReplaceRow(TableAssets, buyDesRow)
 		if err != nil {
-			myLogger.Errorf("execTx error7:%s", err)
+			// myLogger.Errorf("execTx error7:%s", err)
 			return errors.New("Failed updating row"), WorldStateErr
 		}
 	}
@@ -734,14 +734,14 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 	if sellOrder.IsBuyAll && sellOrder.UUID == sellOrder.RawUUID {
 		unlock, err := c.computeBalance(sellOrder.Account, sellOrder.SrcCurrency, sellOrder.DesCurrency, sellOrder.RawUUID, sellOrder.FinalCost)
 		if err != nil {
-			myLogger.Errorf("execTx error8:%s", err)
+			// myLogger.Errorf("execTx error8:%s", err)
 			return errors.New("Failed compute balance"), CheckErr
 		}
-		myLogger.Debugf("Order %s balance %d", sellOrder.UUID, unlock)
+		// myLogger.Debugf("Order %s balance %d", sellOrder.UUID, unlock)
 		if unlock > 0 {
 			err, errType := c.lockOrUnlockBalance(sellOrder.Account, sellOrder.SrcCurrency, sellOrder.RawUUID, unlock, false)
 			if err != nil {
-				myLogger.Errorf("execTx error9:%s", err)
+				// myLogger.Errorf("execTx error9:%s", err)
 				return errors.New("Failed unlock balance"), errType
 			}
 		}
@@ -750,7 +750,7 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 	// 卖单源币数量减少
 	sellSrcRow, sellSrcAsset, err := c.getOwnerOneAsset(sellOrder.Account, sellOrder.SrcCurrency)
 	if err != nil {
-		myLogger.Errorf("execTx error10:%s", err)
+		// myLogger.Errorf("execTx error10:%s", err)
 		return fmt.Errorf("Failed retrieving asset [%s] of the user: [%s]", sellOrder.SrcCurrency, err), CheckErr
 	}
 	if len(sellSrcRow.Columns) == 0 {
@@ -759,14 +759,14 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 	sellSrcRow.Columns[3].Value = &shim.Column_Int64{Int64: sellSrcAsset.LockCount - sellOrder.FinalCost}
 	_, err = c.stub.ReplaceRow(TableAssets, sellSrcRow)
 	if err != nil {
-		myLogger.Errorf("execTx error11:%s", err)
+		// myLogger.Errorf("execTx error11:%s", err)
 		return errors.New("Failed updating row"), WorldStateErr
 	}
 
 	// 卖单目标币数量增加
 	sellDesRow, sellDesAsset, err := c.getOwnerOneAsset(sellOrder.Account, sellOrder.DesCurrency)
 	if err != nil {
-		myLogger.Errorf("execTx error12:%s", err)
+		// myLogger.Errorf("execTx error12:%s", err)
 		return fmt.Errorf("Failed retrieving asset [%s] of the user: [%s]", sellOrder.DesCurrency, err), CheckErr
 	}
 	if len(sellDesRow.Columns) == 0 {
@@ -780,14 +780,14 @@ func (c *ExchangeChaincode) execTx(buyOrder, sellOrder *Order) (error, ErrType) 
 				},
 			})
 		if err != nil {
-			myLogger.Errorf("execTx error13:%s", err)
+			// myLogger.Errorf("execTx error13:%s", err)
 			return errors.New("Failed inserting row"), WorldStateErr
 		}
 	} else {
 		sellDesRow.Columns[2].Value = &shim.Column_Int64{Int64: sellDesAsset.Count + sellOrder.DesCount}
 		_, err = c.stub.ReplaceRow(TableAssets, sellDesRow)
 		if err != nil {
-			myLogger.Errorf("execTx error14:%s", err)
+			// myLogger.Errorf("execTx error14:%s", err)
 			return errors.New("Failed updating row"), WorldStateErr
 		}
 	}
@@ -809,7 +809,7 @@ func (c *ExchangeChaincode) saveTxLog(buyOrder, sellOrder *Order) error {
 		},
 	})
 	if err != nil {
-		myLogger.Errorf("saveTxLog error1:%s", err)
+		// myLogger.Errorf("saveTxLog error1:%s", err)
 		return errors.New("Failed inserting row")
 	}
 
@@ -820,7 +820,7 @@ func (c *ExchangeChaincode) saveTxLog(buyOrder, sellOrder *Order) error {
 		},
 	})
 	if err != nil {
-		myLogger.Errorf("saveTxLog error2:%s", err)
+		// myLogger.Errorf("saveTxLog error2:%s", err)
 		return errors.New("Failed inserting row")
 	}
 
@@ -834,7 +834,7 @@ func (c *ExchangeChaincode) saveTxLog(buyOrder, sellOrder *Order) error {
 		},
 	})
 	if err != nil {
-		myLogger.Errorf("saveTxLog error3:%s", err)
+		// myLogger.Errorf("saveTxLog error3:%s", err)
 		return errors.New("Failed inserting row")
 	}
 
@@ -845,7 +845,7 @@ func (c *ExchangeChaincode) saveTxLog(buyOrder, sellOrder *Order) error {
 		},
 	})
 	if err != nil {
-		myLogger.Errorf("saveTxLog error4:%s", err)
+		// myLogger.Errorf("saveTxLog error4:%s", err)
 		return errors.New("Failed inserting row")
 	}
 	return nil
@@ -864,31 +864,31 @@ func (c *ExchangeChaincode) isCreator(certificate []byte) (bool, error) {
 
 	sigma, err := c.stub.GetCallerMetadata()
 	if err != nil {
-		myLogger.Errorf("isCreator error1:%s", err)
+		// myLogger.Errorf("isCreator error1:%s", err)
 		return false, errors.New("Failed getting metadata")
 	}
 
 	payload, err := c.stub.GetPayload()
 	if err != nil {
-		myLogger.Errorf("isCreator error2:%s", err)
+		// myLogger.Errorf("isCreator error2:%s", err)
 		return false, errors.New("Failed getting payload")
 	}
 
 	binding, err := c.stub.GetBinding()
 	if err != nil {
-		myLogger.Errorf("isCreator error3:%s", err)
+		// myLogger.Errorf("isCreator error3:%s", err)
 		return false, errors.New("Failed getting binding")
 	}
 
-	myLogger.Debugf("passed certificate [% x]", certificate)
-	myLogger.Debugf("passed sigma [% x]", sigma)
-	myLogger.Debugf("passed payload [% x]", payload)
-	myLogger.Debugf("passed binding [% x]", binding)
+	// myLogger.Debugf("passed certificate [% x]", certificate)
+	// myLogger.Debugf("passed sigma [% x]", sigma)
+	// myLogger.Debugf("passed payload [% x]", payload)
+	// myLogger.Debugf("passed binding [% x]", binding)
 
 	ok, err := c.stub.VerifySignature(certificate, sigma, append(payload, binding...))
 	if err != nil {
-		myLogger.Errorf("isCreator error4:%s", err)
-		myLogger.Errorf("Failed checking signature [%s]", err)
+		// myLogger.Errorf("isCreator error4:%s", err)
+		// myLogger.Errorf("Failed checking signature [%s]", err)
 		return ok, err
 	}
 	if !ok {
@@ -922,7 +922,7 @@ func (c *ExchangeChaincode) getCurrencyByID(id string) (shim.Row, *Currency, err
 func (c *ExchangeChaincode) getAllCurrency() ([]shim.Row, []*Currency, error) {
 	rowChannel, err := c.stub.GetRows(TableCurrency, nil)
 	if err != nil {
-		myLogger.Errorf("getAllCurrency error1:%s", err)
+		// myLogger.Errorf("getAllCurrency error1:%s", err)
 		return nil, nil, fmt.Errorf("getRows operation failed. %s", err)
 	}
 	var rows []shim.Row
@@ -977,7 +977,7 @@ func (c *ExchangeChaincode) getOwnerAllAsset(owner string) ([]shim.Row, []*Asset
 		shim.Column{Value: &shim.Column_String_{String_: owner}},
 	})
 	if err != nil {
-		myLogger.Errorf("getOwnerAllAsset error1:%s", err)
+		// myLogger.Errorf("getOwnerAllAsset error1:%s", err)
 		return nil, nil, fmt.Errorf("getOwnerAllAsset operation failed. %s", err)
 	}
 
@@ -1011,7 +1011,7 @@ func (c *ExchangeChaincode) lockOrUnlockBalance(owner string, currency, order st
 
 	row, asset, err := c.getOwnerOneAsset(owner, currency)
 	if err != nil {
-		myLogger.Errorf("lockOrUnlockBalance error1:%s", err)
+		// myLogger.Errorf("lockOrUnlockBalance error1:%s", err)
 		return fmt.Errorf("Failed retrieving asset [%s] of the user: [%s]", currency, err), CheckErr
 	}
 	if len(row.Columns) == 0 {
@@ -1026,11 +1026,11 @@ func (c *ExchangeChaincode) lockOrUnlockBalance(owner string, currency, order st
 	// 判断是否锁定过或解锁过，因为是批量操作，可能会有重复数据。其他批量操作也要作此判断
 	lockRow, err := c.getLockLog(owner, currency, order, islock)
 	if err != nil {
-		myLogger.Errorf("lockOrUnlockBalance error2:%s", err)
+		// myLogger.Errorf("lockOrUnlockBalance error2:%s", err)
 		return err, CheckErr
 	}
 	if len(lockRow.Columns) > 0 {
-		myLogger.Errorf("lockOrUnlockBalance error21:%s, order:%s, IsLock:%s, count:%d", ExecedErr, order, islock, count)
+		// myLogger.Errorf("lockOrUnlockBalance error21:%s, order:%s, IsLock:%s, count:%d", ExecedErr, order, islock, count)
 		return ExecedErr, CheckErr
 	}
 
@@ -1044,7 +1044,7 @@ func (c *ExchangeChaincode) lockOrUnlockBalance(owner string, currency, order st
 
 	_, err = c.stub.ReplaceRow(TableAssets, row)
 	if err != nil {
-		myLogger.Errorf("lockOrUnlockBalance error3:%s", err)
+		// myLogger.Errorf("lockOrUnlockBalance error3:%s", err)
 		return errors.New("Failed updating row."), WorldStateErr
 	}
 
@@ -1060,7 +1060,7 @@ func (c *ExchangeChaincode) lockOrUnlockBalance(owner string, currency, order st
 			},
 		})
 	if err != nil {
-		myLogger.Errorf("lockOrUnlockBalance error4:%s", err)
+		// myLogger.Errorf("lockOrUnlockBalance error4:%s", err)
 		return errors.New("Failed inserting row."), WorldStateErr
 	}
 
@@ -1071,12 +1071,12 @@ func (c *ExchangeChaincode) lockOrUnlockBalance(owner string, currency, order st
 func (c *ExchangeChaincode) computeBalance(owner string, srcCurrency, desCurrency, rawUUID string, currentCost int64) (int64, error) {
 	_, txs, err := c.getTXs(owner, srcCurrency, desCurrency, rawUUID)
 	if err != nil {
-		myLogger.Errorf("computeBalance error1:%s", err)
+		// myLogger.Errorf("computeBalance error1:%s", err)
 		return 0, err
 	}
 	row, err := c.getLockLog(owner, srcCurrency, rawUUID, true)
 	if err != nil {
-		myLogger.Errorf("computeBalance error2:%s", err)
+		// myLogger.Errorf("computeBalance error2:%s", err)
 		return 0, err
 	}
 	if len(row.Columns) == 0 {
@@ -1100,7 +1100,7 @@ func (c *ExchangeChaincode) getTXs(owner string, srcCurrency, desCurrency, rawOr
 		shim.Column{Value: &shim.Column_String_{String_: rawOrder}},
 	})
 	if err != nil {
-		myLogger.Errorf("getTXs error1:%s", err)
+		// myLogger.Errorf("getTXs error1:%s", err)
 		return nil, nil, fmt.Errorf("getTXs operation failed. %s", err)
 	}
 
@@ -1117,7 +1117,7 @@ func (c *ExchangeChaincode) getTXs(owner string, srcCurrency, desCurrency, rawOr
 				order := new(Order)
 				err := json.Unmarshal(row.Columns[4].GetBytes(), order)
 				if err != nil {
-					myLogger.Errorf("getTXs error2:%s", err)
+					// myLogger.Errorf("getTXs error2:%s", err)
 					return nil, nil, fmt.Errorf("Error unmarshaling JSON: %s", err)
 				}
 
@@ -1213,7 +1213,7 @@ func (c *ExchangeChaincode) queryAssetByOwner() ([]byte, error) {
 	owner := c.args[0]
 	_, assets, err := c.getOwnerAllAsset(owner)
 	if err != nil {
-		myLogger.Errorf("queryAssetByOwner error1:%s", err)
+		// myLogger.Errorf("queryAssetByOwner error1:%s", err)
 		return nil, err
 	}
 	if len(assets) == 0 {
@@ -1234,7 +1234,7 @@ func (c *ExchangeChaincode) queryCurrencyByID() ([]byte, error) {
 
 	_, currency, err := c.getCurrencyByID(id)
 	if err != nil {
-		myLogger.Errorf("queryCurrencyByID error1:%s", err)
+		// myLogger.Errorf("queryCurrencyByID error1:%s", err)
 		return nil, err
 	}
 	if currency == nil {
@@ -1273,7 +1273,7 @@ func (c *ExchangeChaincode) queryTxLogs() ([]byte, error) {
 
 	rowChannel, err := c.stub.GetRows(TableTxLog2, nil)
 	if err != nil {
-		myLogger.Errorf("queryTxLogs error1:%s", err)
+		// myLogger.Errorf("queryTxLogs error1:%s", err)
 		return nil, fmt.Errorf("getRows operation failed. %s", err)
 	}
 
@@ -1287,7 +1287,7 @@ func (c *ExchangeChaincode) queryTxLogs() ([]byte, error) {
 				info := new(Order)
 				err = json.Unmarshal(row.Columns[1].GetBytes(), info)
 				if err == nil {
-					myLogger.Errorf("queryTxLogs error2:%s", err)
+					// myLogger.Errorf("queryTxLogs error2:%s", err)
 					infos = append(infos, info)
 				}
 			}
@@ -1304,7 +1304,7 @@ func main() {
 	primitives.SetSecurityLevel("SHA3", 256)
 	err := shim.Start(new(ExchangeChaincode))
 	if err != nil {
-		myLogger.Errorf("mian error1:%s", err)
+		// myLogger.Errorf("mian error1:%s", err)
 		fmt.Printf("Error starting exchange chaincode: %s", err)
 	}
 }
